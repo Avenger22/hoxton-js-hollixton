@@ -107,6 +107,8 @@ main.main-menu {
 .store-item img {
     grid-area: img;
     /* width: 100%; */
+    width: 200px;
+    height: 250px;
 }
 
 .store-item h2 {
@@ -114,7 +116,7 @@ main.main-menu {
     color: #1d2f55;
 }
 
-.store-item span#span-1 {
+.store-item span.span-1 {
     grid-area: span-1;
     color: #cac0c3;
     font-size: 16px;
@@ -122,7 +124,7 @@ main.main-menu {
     text-decoration: underline;
 }
 
-.store-item span#span-2 {
+.store-item span.span-2 {
     grid-area: span-2;
     color: #c22048;
     font-size: 16px;

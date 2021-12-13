@@ -1,0 +1,158 @@
+* {
+    margin:0 0;
+    padding: 0 0;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+}
+
+li {
+    list-style: none;
+}
+
+body {
+    font-family: sans-serif;
+}
+
+section.container-menus {
+    height: auto;
+    width: 100%;
+
+    display: grid;
+    grid-template-rows: 80px 0.95fr 130px;
+}
+
+header.header-menu {
+    display: grid;
+    grid-template-rows: 1fr;
+
+    background-color: #fff;
+    /* position: fixed;
+    z-index: 1; */
+    width: 100%;
+    /* height: 70px; */
+}
+
+header.header-menu nav.header-nav {
+    display: grid;
+    grid-template-columns: 0.7fr 0.3fr;
+    grid-gap: 20px;
+    align-items: center;
+    justify-items: start;
+}
+
+ul.header-ul-1 {
+    display: grid;
+    grid-template-columns: 0.25fr 0.25fr 0.25fr 0.25fr;
+    grid-gap: 25px;
+
+    padding-left: 35px;
+}
+
+ul.header-ul-1 li {
+    color: #1d2f55;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+ul.header-ul-2 {
+    display: grid;
+    grid-template-columns: 0.33fr 0.33fr 0.33fr;
+    grid-gap: 35px;
+    justify-self: end;
+
+    padding-right: 35px;
+}
+
+ul.header-ul-2 li {
+    color: #1d2f55;
+}
+
+main.main-menu {
+    width: 100%;
+    background-color: #f1f1f6;
+
+    display: grid;
+    grid-template-rows: 0.05fr 0.95fr;
+    grid-gap: 20px;
+}
+
+.store-items-wrapper {
+    display: grid;
+    grid-template-columns: 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr;
+    grid-gap: 50px 10px;
+
+    padding-left: 35px;
+}
+
+.main-header {
+    padding-left: 35px;
+    padding-top: 40px;
+}
+
+.store-item {
+    /* height: 250px; */
+    display: grid;
+    grid-template: 
+    "img img" 0.8fr
+    "h2 h2" 0.1fr
+    "span-1 span-2" 0.1fr /
+    0.5fr 0.5fr;
+
+    grid-gap: 15px;
+}
+
+.store-item img {
+    grid-area: img;
+    /* width: 100%; */
+}
+
+.store-item h2 {
+    grid-area: h2;
+    color: #1d2f55;
+}
+
+.store-item span#span-1 {
+    grid-area: span-1;
+    color: #cac0c3;
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+.store-item span#span-2 {
+    grid-area: span-2;
+    color: #c22048;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+footer.footer-menu {
+    width: 100%;
+    background-color: #1d2f55;
+
+    display: grid;
+    grid-template-columns: 0.5fr 0.5fr;
+    align-items: center;
+    justify-items: start;
+}
+
+ul.footer-ul-1 {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding-left: 35px;
+}
+
+footer ul li {
+    font-weight: 700;
+    color: #fff;
+    font-size: 18px;
+}
+ul.footer-ul-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-self: end;
+    padding-right: 35px;
+}

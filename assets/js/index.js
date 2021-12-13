@@ -1,11 +1,11 @@
-// #region "GLOBAL VARIABLES"
+// #region "-----GLOBAL VARIABLES-----"
 
 const sectionMenusEl = document.querySelector('section.container-menus')
 
 // #endregion
 
 
-// #region "STATE OBJECT"
+// #region "-----STATE OBJECT-----"
 
 const state = {
 
@@ -21,7 +21,7 @@ const state = {
 // #endregion
 
 
-// #region "HELPER FUNCTIONS"
+// #region "-----HELPER FUNCTIONS-----"
 
 function listenToLogoEvent(logoElParam) {
 
@@ -96,7 +96,7 @@ function listenToBagEvent(bagParam) {
 // #endregion
 
 
-// #region "SERVER FUNCTIONS"
+// #region "-----SERVER FUNCTIONS-----"
 
 function getStoreArrayFromServer() {
 
@@ -121,7 +121,7 @@ function getUsersArrayFromServer() {
 // #endregion
 
 
-// #region "RENDER FUNCTIONS"
+// #region "-----RENDER FUNCTIONS-----"
 
 function renderHeader() {
 
@@ -131,6 +131,7 @@ function renderHeader() {
     const navEl = document.createElement('nav')
     navEl.setAttribute('class', 'header-nav')
 
+    // #region "CREATING UL HEADER 1"
     const ulHeader1 = document.createElement('ul')
     ulHeader1.setAttribute('class', 'header-ul-1')
 
@@ -166,7 +167,9 @@ function renderHeader() {
     listenToSalesEvent(liUl1_4)
 
     ulHeader1.append(liUl1_1, liUl1_2, liUl1_3, liUl1_4)
+    // #endregion
 
+    // #region "CREATING UL HEADER 2"
     const ulHeader2 = document.createElement('ul')
     ulHeader2.setAttribute('class', 'header-ul-2')
 
@@ -209,6 +212,8 @@ function renderHeader() {
     listenToBagEvent(liUl2_3)
 
     ulHeader2.append(liUl2_1, liUl2_2, liUl2_3)
+    // #endregion
+
     navEl.append(ulHeader1, ulHeader2)
     headerMenuEl.append(navEl)
     sectionMenusEl.append(headerMenuEl)
@@ -220,6 +225,7 @@ function renderMain(storeArrayParam) {
     const mainMenuEl = document.createElement('main')
     mainMenuEl.setAttribute('class', 'main-menu')
 
+    // #region "CREATING THE MAIN HEADER"
     const divEl1 = document.createElement('div')
     divEl1.setAttribute('class', 'main-header')
 
@@ -228,8 +234,9 @@ function renderMain(storeArrayParam) {
     h2El1.textContent = 'Home'
 
     divEl1.append(h2El1)
+    // #endregion
 
-    //here we create he item in the store 
+    // #region "CREATING THE CART ITEM IN THE STORE IN DIV"
     const divEl2 = document.createElement('div')
     divEl2.setAttribute('class', 'store-items-wrapper')
 
@@ -276,6 +283,7 @@ function renderMain(storeArrayParam) {
         }
 
     }
+    // #endregion
 
     mainMenuEl.append(divEl1, divEl2)
     sectionMenusEl.append(mainMenuEl)
@@ -287,6 +295,7 @@ function renderFooter() {
     const footerMenuEl = document.createElement('footer')
     footerMenuEl.setAttribute('class', 'footer-menu')
 
+    // #region "CREATING UL FOOTER 1"
     const ulFooter1 = document.createElement('ul')
     ulFooter1.setAttribute('class', 'footer-ul-1')
 
@@ -294,7 +303,9 @@ function renderFooter() {
     liUl1_1.textContent = 'HOLLIXTON'
 
     ulFooter1.append(liUl1_1)
+    // #endregion
 
+    // #region "CREATING UL FOOTER 2"
     const ulFooter2 = document.createElement('ul')
     ulFooter2.setAttribute('class', 'footer-ul-2')
 
@@ -305,6 +316,7 @@ function renderFooter() {
     liUl2_2.textContent = 'United Kingdom'
 
     ulFooter2.append(liUl2_1, liUl2_2)
+    // #endregion
 
     footerMenuEl.append(ulFooter1, ulFooter2)
     sectionMenusEl.append(footerMenuEl)
@@ -316,6 +328,7 @@ function render() {
     //destroy everything in the html and the page
     sectionMenusEl.innerHTML = ''
 
+    // #region "CONDITIONAL FOR GIRLS CLICKED"
     if (state.girlsClicked === true && state.guysClicked === false && state.salesClicked === false) {
         //recreate everything in html every time render is called, basically rerendering
         renderHeader()
@@ -325,7 +338,9 @@ function render() {
         console.log('Changing here the state from true to false in order to achieve app functionality')
         state.girlsClicked = false
     }
+    // #endregion
 
+    // #region "CONDITIONAL FOR GUYS CLICKED"
     else if (state.girlsClicked === false && state.guysClicked === true && state.salesClicked === false) {
         //recreate everything in html every time render is called, basically rerendering
         renderHeader()
@@ -335,7 +350,9 @@ function render() {
         console.log('Changing here the state from true to false in order to achieve app functionality')
         state.guysClicked = false
     }
+    // #endregion
 
+    // #region "CONDITIONAL FOR SALES CLICKED"
     else if (state.girlsClicked === false && state.guysClicked === false && state.salesClicked === true) {
         //recreate everything in html every time render is called, basically rerendering
         renderHeader()
@@ -345,17 +362,22 @@ function render() {
         console.log('Changing here the state from true to false in order to achieve app functionality')
         state.salesClicked = false
     }
+    // #endregion
 
+    // #region "CONDITIONAL ELSE FOR NORMAL RENDERING NO CLICKING FROM STATE"
     else {
         //recreate everything in html every time render is called, basically rerendering
         renderHeader()
         renderMain(state.store)
         renderFooter()
     }
+    // #endregion
 
 }
 
 function init() {
+
+    render()
 
      //FETCHING AND STORING DATA FROM SERVER TO STATE both arrays from json server
     getStoreArrayFromServer().then(function (storeArrayFromServer) {
@@ -368,14 +390,12 @@ function init() {
         render()
     })
 
-     render()
-
 }
 
 // #endregion
 
 
-// #region "APP START"
+// #region "-----APP START-----"
 
 init()
 

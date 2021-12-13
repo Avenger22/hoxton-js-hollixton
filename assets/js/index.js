@@ -1,6 +1,8 @@
 // #region "-----GLOBAL VARIABLES-----"
 
 const sectionMenusEl = document.querySelector('section.container-menus')
+const divEl1 = document.createElement('div')
+divEl1.setAttribute('class', 'modal-container')
 
 // #endregion
 
@@ -8,13 +10,15 @@ const sectionMenusEl = document.querySelector('section.container-menus')
 // #region "-----STATE OBJECT-----"
 
 const state = {
-
     store: [],
     users: [],
+    bagItems: [],
     girlsClicked: false,
     guysClicked: false,
-    salesClicked: false
-
+    salesClicked: false,
+    searchClicked: false,
+    userClicked: false,
+    bagClicked: false
 }
 
 // #endregion
@@ -78,7 +82,23 @@ function listenToSalesEvent(salesElParam) {
 
 }
 
-function listenToSearchEvent(searchParam) {
+function listenToSearchEvent(searchElParam) {
+
+    searchElParam.addEventListener('click', function(event) {
+        event.preventDefault()
+        divEl1.classList.add('show')
+        render()
+    })
+
+}
+
+function listenToRemoveSearch(buttonElParam) {
+
+    buttonElParam.addEventListener('click', function(event) {
+        event.preventDefault()
+        divEl1.classList.remove('show')
+        render()
+    })
 
 }
 
@@ -161,6 +181,40 @@ function getUsersArrayFromServer() {
 
 
 // #region "-----RENDER FUNCTIONS-----"
+
+function renderSearchModal() {
+
+    const divEl2 = document.createElement('div')
+    divEl2.setAttribute('class', 'modal')
+
+    const h3El = document.createElement('h3')
+    h3El.textContent = 'Seach for your favourite items!'
+
+    const inputEl = document.createElement('input')
+    inputEl.setAttribute('class', 'search-input')
+    inputEl.setAttribute('name', 'search')
+    inputEl.setAttribute('required', 'true')
+    inputEl.setAttribute('type', 'text')
+    inputEl.placeholder = 'Search ....'
+
+    const removeBtn = document.createElement('button')
+    removeBtn.textContent = 'X'
+
+    divEl2.append(h3El, inputEl, removeBtn)
+    divEl1.append(divEl2)
+    sectionMenusEl.append(divEl1)
+
+    listenToRemoveSearch(removeBtn)
+
+}
+
+function renderUserModal() {
+
+}
+
+function renderBagModal() {
+
+}
 
 function renderHeader() {
 
@@ -246,9 +300,9 @@ function renderHeader() {
     liUl2_3.append(btnUl2_3)
 
     //event listener holder and calling them
-    listenToSearchEvent(liUl2_1)
-    listenToUserEvent(liUl2_2)
-    listenToBagEvent(liUl2_3)
+    listenToSearchEvent(btnUl2_1)
+    listenToUserEvent(btnUl2_2)
+    listenToBagEvent(btnUl2_3)
 
     ulHeader2.append(liUl2_1, liUl2_2, liUl2_3)
     // #endregion
@@ -366,6 +420,7 @@ function render() {
 
     //destroy everything in the html and the page
     sectionMenusEl.innerHTML = ''
+    divEl1.innerHTML = ''
 
     // #region "CONDITIONAL FOR GIRLS CLICKED"
     if (state.girlsClicked === true && state.guysClicked === false && state.salesClicked === false) {
@@ -375,6 +430,9 @@ function render() {
         renderHeader()
         renderMain(girlsArrayValue)
         renderFooter()
+        renderSearchModal()
+        renderUserModal()
+        renderBagModal()
 
         console.log('Changing here the state from true to false in order to achieve app functionality')
         state.girlsClicked = false
@@ -390,6 +448,9 @@ function render() {
         renderHeader()
         renderMain(guysArrayValue)
         renderFooter()
+        renderSearchModal()
+        renderUserModal()
+        renderBagModal()
 
         console.log('Changing here the state from true to false in order to achieve app functionality')
         state.guysClicked = false
@@ -405,6 +466,9 @@ function render() {
         renderHeader()
         renderMain(salesArrayValue)
         renderFooter()
+        renderSearchModal()
+        renderUserModal()
+        renderBagModal()
 
         console.log('Changing here the state from true to false in order to achieve app functionality')
         state.salesClicked = false
@@ -419,6 +483,9 @@ function render() {
         renderHeader()
         renderMain(deffaultArrayValue)
         renderFooter()
+        renderSearchModal()
+        renderUserModal()
+        renderBagModal()
     }
     // #endregion
 

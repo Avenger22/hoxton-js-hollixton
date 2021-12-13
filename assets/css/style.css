@@ -152,6 +152,7 @@ footer ul li {
     color: #fff;
     font-size: 18px;
 }
+
 ul.footer-ul-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -163,4 +164,51 @@ header.header-menu button {
     outline: none;
     border: none;
     background-color: transparent;
+    cursor: pointer;
+}
+
+.modal-container {
+    height: 100vh;
+    width: 100%;
+    pointer-events: none;
+    position: fixed;
+    display: none;
+}
+
+.modal-container.show {
+    pointer-events: auto;
+    display: grid;
+    grid-template-rows: 1fr;
+    place-items: center;
+    opacity: 0.8;
+    background-color: rgba(230, 90, 50, 0.3);
+}
+
+.modal {
+    display: grid;
+    grid-template: 
+    "h3-modal button-modal" 0.05fr
+    "input-modal input-modal" 0.95fr /
+    0.9fr 0.1fr;
+    grid-gap: 20px;
+}
+
+.modal button {
+    grid-area: button-modal;
+    padding: 5px 5px;
+}
+
+.modal h3 {
+    grid-area: h3-modal;
+    font-size: 22px;
+    color: #0a0305;
+    font-weight: 900;
+    letter-spacing: 3px;
+}
+
+.modal input {
+    grid-area: input-modal;
+    padding-left: 20px;
+    font-size: 18px;
+    color: black;
 }

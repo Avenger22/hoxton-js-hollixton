@@ -265,7 +265,15 @@ function renderMain(storeArrayParam) {
             spanEl2.setAttribute('class', 'span-2')
             spanEl2.textContent = `£ ${item.discountedPrice}`
 
-            divEl3.append(imgEl, h2El2, spanEl1, spanEl2)
+            const spanEl3 = document.createElement('span')
+            spanEl3.setAttribute('class', 'span-3')
+            spanEl3.textContent = `Stock: ${item.stock}`
+
+            const spanEl4 = document.createElement('span')
+            spanEl4.setAttribute('class', 'span-4')
+            spanEl4.textContent = `Type For ${item.type}`
+
+            divEl3.append(imgEl, h2El2, spanEl1, spanEl2, spanEl3, spanEl4)
             divEl2.append(divEl3)
 
         }
@@ -278,7 +286,15 @@ function renderMain(storeArrayParam) {
             spanEl1.style.color = '#000'
             spanEl1.style.textDecoration = 'none'
 
-            divEl3.append(imgEl, h2El2, spanEl1)
+            const spanEl3 = document.createElement('span')
+            spanEl3.setAttribute('class', 'span-3')
+            spanEl3.textContent = `Stock: ${item.stock}`
+
+            const spanEl4 = document.createElement('span')
+            spanEl4.setAttribute('class', 'span-4')
+            spanEl4.textContent = `Type for: ${item.type}`
+
+            divEl3.append(imgEl, h2El2, spanEl1, spanEl3, spanEl4)
             divEl2.append(divEl3)
 
         }
@@ -332,6 +348,7 @@ function render() {
         renderMain(state.girlsArray)
         renderFooter()
 
+        console.log('Changing here the state from true to false in order to achieve app functionality')
         state.girlsClicked = false
 
     }
@@ -343,6 +360,7 @@ function render() {
         renderMain(state.guysArray)
         renderFooter()
 
+        console.log('Changing here the state from true to false in order to achieve app functionality')
         state.guysClicked = false
 
     }
@@ -354,6 +372,7 @@ function render() {
         renderMain(state.salesArray)
         renderFooter()
 
+        console.log('Changing here the state from true to false in order to achieve app functionality')
         state.salesClicked = false
 
     }

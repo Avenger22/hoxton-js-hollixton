@@ -1,8 +1,9 @@
 const sectionMenusEl = document.querySelector('section.container-menus')
 //global arrays to filter things based on event listeners
-let girlsArray = [] 
-let guysArray = []
-let salesArray = []
+// let girlsArray = [] 
+// let guysArray = []
+// let salesArray = []
+// let searchArray = []
 
 //-----------------------------------------------STATE OBJECT---------------------------------------------------------------------------------
 
@@ -10,6 +11,9 @@ const state = {
 
     store: [],
     users: [],
+    girlsArray: [],
+    guysArray: [],
+    salesArray: [],
     girlsClicked: false,
     guysClicked: false,
     salesClicked: false
@@ -39,7 +43,7 @@ function listenToGirlsEvent(girlsElParam) {
         state.girlsClicked = true
         console.log("Girls is Clicked")
 
-        girlsArray = state.store.filter(function(item) {
+        state.girlsArray = state.store.filter(function(item) {
             return item.type === 'Girls'
         })
 
@@ -56,7 +60,7 @@ function listenToGuysEvent(guysElParam) {
         state.guysClicked = true
         console.log("Guys is Clicked")
 
-        guysArray = state.store.filter(function(item) {
+        state.guysArray = state.store.filter(function(item) {
             return item.type === 'Guys'
         })
 
@@ -74,7 +78,7 @@ function listenToSalesEvent(salesElParam) {
         state.salesClicked = true
         console.log("Sales is Clicked")
 
-        salesArray = state.store.filter(function(item) {
+        state.salesArray = state.store.filter(function(item) {
             return item.hasOwnProperty('discountedPrice')
         })
 
@@ -82,6 +86,18 @@ function listenToSalesEvent(salesElParam) {
 
     })
 
+}
+
+function listenToSearchEvent(searchParam) {
+
+}
+
+function listenToUserEvent(userParam) {
+    
+}
+
+function listenToBagEvent(bagParam) {
+    
 }
 //--------------------------------------------END OF HELPER FUNCTIONS---------------------------------------------------------------------------------
 
@@ -134,30 +150,27 @@ function renderHeader() {
     aUl1_1.setAttribute('href', '#')
     aUl1_1.textContent = 'HOLLIXTON'
 
-    listenToLogoEvent(aUl1_1)
-
     const aUl1_2 = document.createElement('a')
     aUl1_2.setAttribute('href', '#')
     aUl1_2.textContent = 'Girls'
-
-    listenToGirlsEvent(aUl1_2)
 
     const aUl1_3 = document.createElement('a')
     aUl1_3.setAttribute('href', '#')
     aUl1_3.textContent = 'Guys'
 
-    listenToGuysEvent(aUl1_3)
-
     const aUl1_4 = document.createElement('a')
     aUl1_4.setAttribute('href', '#')
     aUl1_4.textContent = 'Sales'
-
-    listenToSalesEvent(aUl1_4)
     
     liUl1_1.append(aUl1_1)
     liUl1_2.append(aUl1_2)
     liUl1_3.append(aUl1_3)
     liUl1_4.append(aUl1_4)
+
+    listenToLogoEvent(liUl1_1)
+    listenToGirlsEvent(liUl1_2)
+    listenToGuysEvent(liUl1_3)
+    listenToSalesEvent(liUl1_4)
 
     ulHeader1.append(liUl1_1, liUl1_2, liUl1_3, liUl1_4)
 
@@ -167,6 +180,15 @@ function renderHeader() {
     const liUl2_1 = document.createElement('li')
     const liUl2_2 = document.createElement('li')
     const liUl2_3 = document.createElement('li')
+
+    const aUl2_1 = document.createElement('a')
+    aUl2_1.setAttribute('href', '#')
+
+    const aUl2_2 = document.createElement('a')
+    aUl2_2.setAttribute('href', '#')
+
+    const aUl2_3 = document.createElement('a')
+    aUl2_3.setAttribute('href', '#')
 
     const imgUl2_1 = document.createElement('img')
     imgUl2_1.setAttribute('src', './assets/icons/search.png')
@@ -180,9 +202,18 @@ function renderHeader() {
     imgUl2_3.setAttribute('src', './assets/icons/shopping-bag.png')
     imgUl2_3.setAttribute('alt', '')
 
-    liUl2_1.append(imgUl2_1)
-    liUl2_2.append(imgUl2_2)
-    liUl2_3.append(imgUl2_3)
+    aUl2_1.append(imgUl2_1)
+    aUl2_2.append(imgUl2_2)
+    aUl2_3.append(imgUl2_3)
+
+    liUl2_1.append(aUl2_1)
+    liUl2_2.append(aUl2_2)
+    liUl2_3.append(aUl2_3)
+
+    //event listener holder and calling them
+    listenToSearchEvent(liUl2_1)
+    listenToUserEvent(liUl2_2)
+    listenToBagEvent(liUl2_3)
 
     ulHeader2.append(liUl2_1, liUl2_2, liUl2_3)
 
@@ -298,7 +329,7 @@ function render() {
 
         //recreate everything in html every time render is called, basically rerendering
         renderHeader()
-        renderMain(girlsArray)
+        renderMain(state.girlsArray)
         renderFooter()
 
         state.girlsClicked = false
@@ -309,7 +340,7 @@ function render() {
 
         //recreate everything in html every time render is called, basically rerendering
         renderHeader()
-        renderMain(guysArray)
+        renderMain(state.guysArray)
         renderFooter()
 
         state.guysClicked = false
@@ -320,7 +351,7 @@ function render() {
 
         //recreate everything in html every time render is called, basically rerendering
         renderHeader()
-        renderMain(salesArray)
+        renderMain(state.salesArray)
         renderFooter()
 
         state.salesClicked = false

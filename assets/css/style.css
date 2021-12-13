@@ -158,3 +158,9 @@ ul.footer-ul-2 {
     justify-self: end;
     padding-right: 35px;
 }
+
+header.header-menu button {
+    outline: none;
+    border: none;
+    background-color: transparent;
+}

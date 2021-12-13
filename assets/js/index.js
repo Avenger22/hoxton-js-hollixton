@@ -11,7 +11,6 @@ const state = {
 
     store: [],
     users: [],
-    newStore: [],
     girlsClicked: false,
     guysClicked: false,
     salesClicked: false
@@ -23,11 +22,16 @@ const state = {
 
 // #region "-----HELPER FUNCTIONS-----"
 
+// #region "EVENT LISTENER FUNCTIONS
+
 function listenToLogoEvent(logoElParam) {
 
     logoElParam.addEventListener('click', function(event) {
         event.preventDefault()
         console.log("Logo is Clicked")
+
+        getDeffaultLogoFilter()
+
         render()
     })
 
@@ -40,10 +44,7 @@ function listenToGirlsEvent(girlsElParam) {
         state.girlsClicked = true
         console.log("Girls is Clicked")
 
-        state.newStore = state.store.filter(function(item) {
-            return item.type === 'Girls'
-        })
-
+        getGirlsFromStateFilter()
         render()
     })
 
@@ -56,9 +57,7 @@ function listenToGuysEvent(guysElParam) {
         state.guysClicked = true
         console.log("Guys is Clicked")
 
-        state.newStore = state.store.filter(function(item) {
-            return item.type === 'Guys'
-        })
+        getGuysFromStateFilter()
 
         render()
     })
@@ -72,9 +71,7 @@ function listenToSalesEvent(salesElParam) {
         state.salesClicked = true
         console.log("Sales is Clicked")
 
-        state.newStore = state.store.filter(function(item) {
-            return item.hasOwnProperty('discountedPrice')
-        })
+        getSalesFromStateFilter()
 
         render()
     })
@@ -92,6 +89,48 @@ function listenToUserEvent(userParam) {
 function listenToBagEvent(bagParam) {
     
 }
+
+// #endregion
+
+// #region "FILTER FUNCTIONS"
+
+function getDeffaultLogoFilter() {
+
+    let stateLogoDeffaultArray = []
+    return stateLogoDeffaultArray = state.store.filter(function(item) {
+        return item
+    })
+
+}
+
+function getGirlsFromStateFilter() {
+
+    let stateGirlsArray = []
+    return stateGirlsArray = state.store.filter(function(item) {
+        return item.type === 'Girls'
+    })
+
+}
+
+function getGuysFromStateFilter() {
+
+    let stateGuysArray = []
+    return stateGuysArray = state.store.filter(function(item) {
+        return item.type === 'Guys'
+    })
+
+}
+
+function getSalesFromStateFilter() {
+
+    let stateSalesArray = []
+    return stateSalesArray = state.store.filter(function(item) {
+        return item.hasOwnProperty('discountedPrice')
+    })
+
+}
+
+// #endregion
 
 // #endregion
 
@@ -177,14 +216,14 @@ function renderHeader() {
     const liUl2_2 = document.createElement('li')
     const liUl2_3 = document.createElement('li')
 
-    const aUl2_1 = document.createElement('a')
-    aUl2_1.setAttribute('href', '#')
+    const btnUl2_1 = document.createElement('button')
+    btnUl2_1.setAttribute('href', '#')
 
-    const aUl2_2 = document.createElement('a')
-    aUl2_2.setAttribute('href', '#')
+    const btnUl2_2 = document.createElement('button')
+    btnUl2_2.setAttribute('href', '#')
 
-    const aUl2_3 = document.createElement('a')
-    aUl2_3.setAttribute('href', '#')
+    const btnUl2_3 = document.createElement('button')
+    btnUl2_3.setAttribute('href', '#')
 
     const imgUl2_1 = document.createElement('img')
     imgUl2_1.setAttribute('src', './assets/icons/search.png')
@@ -198,13 +237,13 @@ function renderHeader() {
     imgUl2_3.setAttribute('src', './assets/icons/shopping-bag.png')
     imgUl2_3.setAttribute('alt', '')
 
-    aUl2_1.append(imgUl2_1)
-    aUl2_2.append(imgUl2_2)
-    aUl2_3.append(imgUl2_3)
+    btnUl2_1.append(imgUl2_1)
+    btnUl2_2.append(imgUl2_2)
+    btnUl2_3.append(imgUl2_3)
 
-    liUl2_1.append(aUl2_1)
-    liUl2_2.append(aUl2_2)
-    liUl2_3.append(aUl2_3)
+    liUl2_1.append(btnUl2_1)
+    liUl2_2.append(btnUl2_2)
+    liUl2_3.append(btnUl2_3)
 
     //event listener holder and calling them
     listenToSearchEvent(liUl2_1)
@@ -330,45 +369,55 @@ function render() {
 
     // #region "CONDITIONAL FOR GIRLS CLICKED"
     if (state.girlsClicked === true && state.guysClicked === false && state.salesClicked === false) {
+
+        const girlsArrayValue = getGirlsFromStateFilter()
         //recreate everything in html every time render is called, basically rerendering
         renderHeader()
-        renderMain(state.newStore)
+        renderMain(girlsArrayValue)
         renderFooter()
 
         console.log('Changing here the state from true to false in order to achieve app functionality')
         state.girlsClicked = false
+
     }
     // #endregion
 
     // #region "CONDITIONAL FOR GUYS CLICKED"
     else if (state.girlsClicked === false && state.guysClicked === true && state.salesClicked === false) {
+
+        guysArrayValue = getGuysFromStateFilter()
         //recreate everything in html every time render is called, basically rerendering
         renderHeader()
-        renderMain(state.newStore)
+        renderMain(guysArrayValue)
         renderFooter()
 
         console.log('Changing here the state from true to false in order to achieve app functionality')
         state.guysClicked = false
+
     }
     // #endregion
 
     // #region "CONDITIONAL FOR SALES CLICKED"
     else if (state.girlsClicked === false && state.guysClicked === false && state.salesClicked === true) {
+
+        salesArrayValue = getSalesFromStateFilter()
         //recreate everything in html every time render is called, basically rerendering
         renderHeader()
-        renderMain(state.newStore)
+        renderMain(salesArrayValue)
         renderFooter()
 
         console.log('Changing here the state from true to false in order to achieve app functionality')
         state.salesClicked = false
+
     }
     // #endregion
 
     // #region "CONDITIONAL ELSE FOR NORMAL RENDERING NO CLICKING FROM STATE"
     else {
+        deffaultArrayValue = getDeffaultLogoFilter()
         //recreate everything in html every time render is called, basically rerendering
         renderHeader()
-        renderMain(state.store)
+        renderMain(deffaultArrayValue)
         renderFooter()
     }
     // #endregion

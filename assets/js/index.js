@@ -1,29 +1,27 @@
-const sectionMenusEl = document.querySelector('section.container-menus')
-//global arrays to filter things based on event listeners
-// let girlsArray = [] 
-// let guysArray = []
-// let salesArray = []
-// let searchArray = []
+// #region "GLOBAL VARIABLES"
 
-//-----------------------------------------------STATE OBJECT---------------------------------------------------------------------------------
+const sectionMenusEl = document.querySelector('section.container-menus')
+
+// #endregion
+
+
+// #region "STATE OBJECT"
 
 const state = {
 
     store: [],
     users: [],
-    girlsArray: [],
-    guysArray: [],
-    salesArray: [],
+    newStore: [],
     girlsClicked: false,
     guysClicked: false,
     salesClicked: false
 
 }
 
-//--------------------------------------------END OF STATE OBJECT----------------------------------------------------------------
+// #endregion
 
 
-//-----------------------------------------------HELPER FUNCTIONS---------------------------------------------------------------------------------
+// #region "HELPER FUNCTIONS"
 
 function listenToLogoEvent(logoElParam) {
 
@@ -38,12 +36,11 @@ function listenToLogoEvent(logoElParam) {
 function listenToGirlsEvent(girlsElParam) {
 
     girlsElParam.addEventListener('click', function(event) {
-
         event.preventDefault()
         state.girlsClicked = true
         console.log("Girls is Clicked")
 
-        state.girlsArray = state.store.filter(function(item) {
+        state.newStore = state.store.filter(function(item) {
             return item.type === 'Girls'
         })
 
@@ -53,19 +50,17 @@ function listenToGirlsEvent(girlsElParam) {
 }
 
 function listenToGuysEvent(guysElParam) {
-    
-    guysElParam.addEventListener('click', function(event) {
 
+    guysElParam.addEventListener('click', function(event) {
         event.preventDefault()
         state.guysClicked = true
         console.log("Guys is Clicked")
 
-        state.guysArray = state.store.filter(function(item) {
+        state.newStore = state.store.filter(function(item) {
             return item.type === 'Guys'
         })
 
         render()
-
     })
 
 }
@@ -73,17 +68,15 @@ function listenToGuysEvent(guysElParam) {
 function listenToSalesEvent(salesElParam) {
 
     salesElParam.addEventListener('click', function(event) {
-
         event.preventDefault()
         state.salesClicked = true
         console.log("Sales is Clicked")
 
-        state.salesArray = state.store.filter(function(item) {
+        state.newStore = state.store.filter(function(item) {
             return item.hasOwnProperty('discountedPrice')
         })
 
         render()
-
     })
 
 }
@@ -99,10 +92,11 @@ function listenToUserEvent(userParam) {
 function listenToBagEvent(bagParam) {
     
 }
-//--------------------------------------------END OF HELPER FUNCTIONS---------------------------------------------------------------------------------
+
+// #endregion
 
 
-//--------------------------------------------SERVER FUNCTIONS-------------------------------------------------------------------------------
+// #region "SERVER FUNCTIONS"
 
 function getStoreArrayFromServer() {
 
@@ -124,11 +118,10 @@ function getUsersArrayFromServer() {
 
 }
 
-//------------------------------------------END OF SERVER FUNCTIONS---------------------------------------------------------------------
+// #endregion
 
 
-
-//---------------------------------------------RENDER FUNCTIONS------------------------------------------------------------------------------
+// #region "RENDER FUNCTIONS"
 
 function renderHeader() {
 
@@ -216,10 +209,8 @@ function renderHeader() {
     listenToBagEvent(liUl2_3)
 
     ulHeader2.append(liUl2_1, liUl2_2, liUl2_3)
-
     navEl.append(ulHeader1, ulHeader2)
     headerMenuEl.append(navEl)
-
     sectionMenusEl.append(headerMenuEl)
 
 }
@@ -254,55 +245,39 @@ function renderMain(storeArrayParam) {
         const h2El2 = document.createElement('h2')
         h2El2.textContent = item.name
 
+        const spanEl1 = document.createElement('span')
+        spanEl1.setAttribute('class', 'span-1 special-span')
+        spanEl1.textContent = `£ ${item.price}`
+
+        const spanEl2 = document.createElement('span')
+        spanEl2.setAttribute('class', 'span-2')
+        spanEl2.textContent = `£ ${item.discountedPrice}`
+
+        const spanEl3 = document.createElement('span')
+        spanEl3.setAttribute('class', 'span-3')
+        spanEl3.textContent = `Stock: ${item.stock}`
+
+        const spanEl4 = document.createElement('span')
+        spanEl4.setAttribute('class', 'span-4')
+        spanEl4.textContent = `Type For ${item.type}`
+
         //now we check if an propery in in the object to see discounted price or not
         if (item.hasOwnProperty('discountedPrice')) {
-
-            const spanEl1 = document.createElement('span')
-            spanEl1.setAttribute('class', 'span-1 special-span')
-            spanEl1.textContent = `£ ${item.price}`
-
-            const spanEl2 = document.createElement('span')
-            spanEl2.setAttribute('class', 'span-2')
-            spanEl2.textContent = `£ ${item.discountedPrice}`
-
-            const spanEl3 = document.createElement('span')
-            spanEl3.setAttribute('class', 'span-3')
-            spanEl3.textContent = `Stock: ${item.stock}`
-
-            const spanEl4 = document.createElement('span')
-            spanEl4.setAttribute('class', 'span-4')
-            spanEl4.textContent = `Type For ${item.type}`
-
             divEl3.append(imgEl, h2El2, spanEl1, spanEl2, spanEl3, spanEl4)
             divEl2.append(divEl3)
-
         }
 
         else {
-
-            const spanEl1 = document.createElement('span')
-            spanEl1.setAttribute('class', 'span-1 special-span')
-            spanEl1.textContent = `£ ${item.price}`
             spanEl1.style.color = '#000'
             spanEl1.style.textDecoration = 'none'
 
-            const spanEl3 = document.createElement('span')
-            spanEl3.setAttribute('class', 'span-3')
-            spanEl3.textContent = `Stock: ${item.stock}`
-
-            const spanEl4 = document.createElement('span')
-            spanEl4.setAttribute('class', 'span-4')
-            spanEl4.textContent = `Type for: ${item.type}`
-
             divEl3.append(imgEl, h2El2, spanEl1, spanEl3, spanEl4)
             divEl2.append(divEl3)
-
         }
 
     }
 
     mainMenuEl.append(divEl1, divEl2)
-
     sectionMenusEl.append(mainMenuEl)
 
 }
@@ -342,48 +317,40 @@ function render() {
     sectionMenusEl.innerHTML = ''
 
     if (state.girlsClicked === true && state.guysClicked === false && state.salesClicked === false) {
-
         //recreate everything in html every time render is called, basically rerendering
         renderHeader()
-        renderMain(state.girlsArray)
+        renderMain(state.newStore)
         renderFooter()
 
         console.log('Changing here the state from true to false in order to achieve app functionality')
         state.girlsClicked = false
-
     }
 
     else if (state.girlsClicked === false && state.guysClicked === true && state.salesClicked === false) {
-
         //recreate everything in html every time render is called, basically rerendering
         renderHeader()
-        renderMain(state.guysArray)
+        renderMain(state.newStore)
         renderFooter()
 
         console.log('Changing here the state from true to false in order to achieve app functionality')
         state.guysClicked = false
-
     }
 
     else if (state.girlsClicked === false && state.guysClicked === false && state.salesClicked === true) {
-
         //recreate everything in html every time render is called, basically rerendering
         renderHeader()
-        renderMain(state.salesArray)
+        renderMain(state.newStore)
         renderFooter()
 
         console.log('Changing here the state from true to false in order to achieve app functionality')
         state.salesClicked = false
-
     }
 
     else {
-
         //recreate everything in html every time render is called, basically rerendering
         renderHeader()
         renderMain(state.store)
         renderFooter()
-
     }
 
 }
@@ -401,10 +368,15 @@ function init() {
         render()
     })
 
-    render()
+     render()
 
 }
 
-//---------------------------------------END OF RENDER FUNCTIONS---------------------------------------------------------------
+// #endregion
+
+
+// #region "APP START"
 
 init()
+
+// #endregion

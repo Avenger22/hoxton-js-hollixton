@@ -1,14 +1,18 @@
 // #region "-----GLOBAL VARIABLES-----"
-
 const sectionMenusEl = document.querySelector('section.container-menus')
+
 const divEl1 = document.createElement('div')
 divEl1.setAttribute('class', 'modal-container')
 
+const divEl2 = document.createElement('div')
+divEl2.setAttribute('class', 'modal-container-2')
+
+const divEl3 = document.createElement('div')
+divEl3.setAttribute('class', 'modal-container-3')
 // #endregion
 
 
 // #region "-----STATE OBJECT-----"
-
 const state = {
     store: [],
     users: [],
@@ -20,7 +24,6 @@ const state = {
     userClicked: false,
     bagClicked: false
 }
-
 // #endregion
 
 
@@ -28,6 +31,7 @@ const state = {
 
 // #region "EVENT LISTENER FUNCTIONS
 
+// #region "EVENT LISTENER LINKS"
 function listenToLogoEvent(logoElParam) {
 
     logoElParam.addEventListener('click', function(event) {
@@ -81,7 +85,9 @@ function listenToSalesEvent(salesElParam) {
     })
 
 }
+// #endregion
 
+// #region 'SEARCH'
 function listenToSearchEvent(searchElParam) {
 
     searchElParam.addEventListener('click', function(event) {
@@ -102,18 +108,49 @@ function listenToRemoveSearch(buttonElParam) {
 
 }
 
-function listenToUserEvent(userParam) {
+// #endregion
+
+// #region 'USER'
+function listenToUserEvent(userElParam) {
+    
+    userElParam.addEventListener('click', function(event) {
+        event.preventDefault()
+        divEl2.classList.add('show')
+        render()
+    })
+
+}
+
+function listenToRemoveUser(buttonElParam) {
+
+    buttonElParam.addEventListener('click', function(event) {
+        event.preventDefault()
+        divEl2.classList.remove('show')
+        render()
+    })
+
+}
+// #endregion
+
+// #region 'BAG'
+function listenToBagEvent(bagElParam) {
     
 }
 
-function listenToBagEvent(bagParam) {
-    
+function listenToRemoveBag(buttonElParam) {
+
+    buttonElParam.addEventListener('click', function(event) {
+        event.preventDefault()
+        divEl3.classList.remove('show')
+        render()
+    })
+
 }
+// #endregion
 
 // #endregion
 
 // #region "FILTER FUNCTIONS"
-
 function getDeffaultLogoFilter() {
 
     let stateLogoDeffaultArray = []
@@ -149,7 +186,6 @@ function getSalesFromStateFilter() {
     })
 
 }
-
 // #endregion
 
 // #endregion
@@ -182,6 +218,7 @@ function getUsersArrayFromServer() {
 
 // #region "-----RENDER FUNCTIONS-----"
 
+// #region "RENDERING MODALS"
 function renderSearchModal() {
 
     const divEl2 = document.createElement('div')
@@ -210,12 +247,70 @@ function renderSearchModal() {
 
 function renderUserModal() {
 
+    const divEl2Modal = document.createElement('div')
+    divEl2Modal.setAttribute('class', 'modal-2')
+
+    const h3el = document.createElement('h3')
+    h3el.textContent = 'Sign In'
+
+    const divInputEl1 = document.createElement('div')
+    divInputEl1.setAttribute('class', 'input-wrapper-user')
+
+    const spanEl1 = document.createElement('span')
+    spanEl1.textContent = 'Email:'
+
+    const inputEl1 = document.createElement('input')
+    inputEl1.setAttribute('class', 'email-input-user')
+    inputEl1.setAttribute('name', 'email')
+    inputEl1.setAttribute('required', 'true')
+    inputEl1.setAttribute('type', 'email')
+    inputEl1.placeholder = 'Enter Email'
+
+    divInputEl1.append(spanEl1, inputEl1)
+
+    const divInputEl2 = document.createElement('div')
+    divInputEl2.setAttribute('class', 'input-wrapper-user')
+
+    const spanEl2 = document.createElement('span')
+    spanEl2.textContent = 'Password:'
+
+    const inputEl2 = document.createElement('input')
+    inputEl2.setAttribute('class', 'password-input-user')
+    inputEl2.setAttribute('name', 'password')
+    inputEl2.setAttribute('required', 'true')
+    inputEl2.setAttribute('type', 'password')
+    inputEl2.placeholder = 'Enter Password'
+
+    divInputEl2.append(spanEl2, inputEl2)
+
+    const divBtnEl = document.createElement('div')
+    divBtnEl.setAttribute('class', 'btn-wrapper-user')
+
+    const btnEl = document.createElement('button')
+    btnEl.textContent = 'Sign In'
+
+    const removeBtnEl = document.createElement('button')
+    removeBtnEl.textContent = 'X'
+
+    divBtnEl.append(btnEl, removeBtnEl)
+    divEl2Modal.append(h3el, divInputEl1, divInputEl2, divBtnEl)
+    divEl2.append(divEl2Modal)
+    sectionMenusEl.append(divEl2)
+
+    listenToRemoveUser(removeBtnEl)
+
 }
 
 function renderBagModal() {
 
-}
+    const divEl3 = document.createElement('div')
+    divEl3.setAttribute('class', 'modal-3')
 
+
+}
+// #endregion
+
+// #region "RENDERING PAGE HTML"
 function renderHeader() {
 
     const headerMenuEl = document.createElement('header')
@@ -415,12 +510,16 @@ function renderFooter() {
     sectionMenusEl.append(footerMenuEl)
 
 }
+// #endregion
 
+// #region "RENDER AND INIT"
 function render() {
 
     //destroy everything in the html and the page
     sectionMenusEl.innerHTML = ''
     divEl1.innerHTML = ''
+    divEl2.innerHTML = ''
+    divEl3.innerHTML = ''
 
     // #region "CONDITIONAL FOR GIRLS CLICKED"
     if (state.girlsClicked === true && state.guysClicked === false && state.salesClicked === false) {
@@ -507,12 +606,11 @@ function init() {
     })
 
 }
+// #endregion
 
 // #endregion
 
 
 // #region "-----APP START-----"
-
 init()
-
 // #endregion

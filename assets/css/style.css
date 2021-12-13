@@ -180,7 +180,7 @@ header.header-menu button {
     display: grid;
     grid-template-rows: 1fr;
     place-items: center;
-    opacity: 0.8;
+    opacity: 1;
     background-color: rgba(230, 90, 50, 0.3);
 }
 
@@ -191,6 +191,7 @@ header.header-menu button {
     "input-modal input-modal" 0.95fr /
     0.9fr 0.1fr;
     grid-gap: 20px;
+    background-color: #f1f1f6;
 }
 
 .modal button {
@@ -211,4 +212,53 @@ header.header-menu button {
     padding-left: 20px;
     font-size: 18px;
     color: black;
+}
+
+.modal-container-2 {
+    height: 100vh;
+    width: 100%;
+    pointer-events: none;
+    position: fixed;
+    display: none;
+}
+
+.modal-container-2.show {
+    pointer-events: auto;
+    display: grid;
+    grid-template-rows: 1fr;
+    place-items: center;
+    opacity: 1;
+    background-color: rgba(230, 90, 50, 0.3);
+}
+
+
+.modal-2 {
+    display: grid;
+    grid-template-rows: 0.1fr 0.4fr 0.5fr;
+    grid-gap: 20px;
+    background-color: #f1f1f6;
+}
+
+.modal-container-3 {
+    height: 100vh;
+    width: 100%;
+    pointer-events: none;
+    position: fixed;
+    display: none;
+}
+
+.modal-container-3.show {
+    pointer-events: auto;
+    display: grid;
+    grid-template-rows: 1fr;
+    place-items: center;
+    opacity: 0.8;
+    background-color: rgba(230, 90, 50, 0.3);
+}
+
+
+.modal-3 {
+    display: grid;
+    grid-template-rows: 0.1fr 0.4fr 0.5fr;
+    grid-gap: 20px;
 }

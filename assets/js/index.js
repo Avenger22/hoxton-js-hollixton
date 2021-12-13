@@ -1,16 +1,89 @@
 const sectionMenusEl = document.querySelector('section.container-menus')
-
+//global arrays to filter things based on event listeners
+let girlsArray = [] 
+let guysArray = []
+let salesArray = []
 
 //-----------------------------------------------STATE OBJECT---------------------------------------------------------------------------------
 
 const state = {
 
     store: [],
-    users: []
+    users: [],
+    girlsClicked: false,
+    guysClicked: false,
+    salesClicked: false
 
 }
 
 //--------------------------------------------END OF STATE OBJECT----------------------------------------------------------------
+
+
+//-----------------------------------------------HELPER FUNCTIONS---------------------------------------------------------------------------------
+
+function listenToLogoEvent(logoElParam) {
+
+    logoElParam.addEventListener('click', function(event) {
+        event.preventDefault()
+        console.log("Logo is Clicked")
+        render()
+    })
+
+}
+
+function listenToGirlsEvent(girlsElParam) {
+
+    girlsElParam.addEventListener('click', function(event) {
+
+        event.preventDefault()
+        state.girlsClicked = true
+        console.log("Girls is Clicked")
+
+        girlsArray = state.store.filter(function(item) {
+            return item.type === 'Girls'
+        })
+
+        render()
+    })
+
+}
+
+function listenToGuysEvent(guysElParam) {
+    
+    guysElParam.addEventListener('click', function(event) {
+
+        event.preventDefault()
+        state.guysClicked = true
+        console.log("Guys is Clicked")
+
+        guysArray = state.store.filter(function(item) {
+            return item.type === 'Guys'
+        })
+
+        render()
+
+    })
+
+}
+
+function listenToSalesEvent(salesElParam) {
+
+    salesElParam.addEventListener('click', function(event) {
+
+        event.preventDefault()
+        state.salesClicked = true
+        console.log("Sales is Clicked")
+
+        salesArray = state.store.filter(function(item) {
+            return item.hasOwnProperty('discountedPrice')
+        })
+
+        render()
+
+    })
+
+}
+//--------------------------------------------END OF HELPER FUNCTIONS---------------------------------------------------------------------------------
 
 
 //--------------------------------------------SERVER FUNCTIONS-------------------------------------------------------------------------------
@@ -61,17 +134,25 @@ function renderHeader() {
     aUl1_1.setAttribute('href', '#')
     aUl1_1.textContent = 'HOLLIXTON'
 
+    listenToLogoEvent(aUl1_1)
+
     const aUl1_2 = document.createElement('a')
     aUl1_2.setAttribute('href', '#')
     aUl1_2.textContent = 'Girls'
+
+    listenToGirlsEvent(aUl1_2)
 
     const aUl1_3 = document.createElement('a')
     aUl1_3.setAttribute('href', '#')
     aUl1_3.textContent = 'Guys'
 
+    listenToGuysEvent(aUl1_3)
+
     const aUl1_4 = document.createElement('a')
     aUl1_4.setAttribute('href', '#')
     aUl1_4.textContent = 'Sales'
+
+    listenToSalesEvent(aUl1_4)
     
     liUl1_1.append(aUl1_1)
     liUl1_2.append(aUl1_2)
@@ -210,11 +291,50 @@ function renderFooter() {
 
 function render() {
 
+    //destroy everything in the html and the page
     sectionMenusEl.innerHTML = ''
 
-    renderHeader()
-    renderMain(state.store)
-    renderFooter()
+    if (state.girlsClicked === true && state.guysClicked === false && state.salesClicked === false) {
+
+        //recreate everything in html every time render is called, basically rerendering
+        renderHeader()
+        renderMain(girlsArray)
+        renderFooter()
+
+        state.girlsClicked = false
+
+    }
+
+    else if (state.girlsClicked === false && state.guysClicked === true && state.salesClicked === false) {
+
+        //recreate everything in html every time render is called, basically rerendering
+        renderHeader()
+        renderMain(guysArray)
+        renderFooter()
+
+        state.guysClicked = false
+
+    }
+
+    else if (state.girlsClicked === false && state.guysClicked === false && state.salesClicked === true) {
+
+        //recreate everything in html every time render is called, basically rerendering
+        renderHeader()
+        renderMain(salesArray)
+        renderFooter()
+
+        state.salesClicked = false
+
+    }
+
+    else {
+
+        //recreate everything in html every time render is called, basically rerendering
+        renderHeader()
+        renderMain(state.store)
+        renderFooter()
+
+    }
 
 }
 

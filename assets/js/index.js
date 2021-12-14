@@ -10,6 +10,8 @@ divEl2.setAttribute('class', 'modal-container-2')
 const divEl3 = document.createElement('div')
 divEl3.setAttribute('class', 'modal-container-3')
 
+let spanHolderEl = null
+
 //super crucial for catching each name and passing it in render in else if, problem is because the filter function had param and passing was hard so this solved
 let searchCatcher = []
 let userCatcher = [] 
@@ -17,10 +19,13 @@ let userCatcher = []
 
 
 // #region "-----STATE OBJECT-----"
+//Everything is here everything is retrieveed from state, every filters updates the state then rerenders, state answers app questions concept
 const state = {
     store: [],
     users: [],
     bagItems: [],
+    userName: null,
+    userShowClass: null,
     girlsClicked: false,
     guysClicked: false,
     salesClicked: false,
@@ -53,10 +58,11 @@ function listenToGirlsEvent(girlsElParam) {
 
     girlsElParam.addEventListener('click', function(event) {
         event.preventDefault()
-        state.girlsClicked = true
         console.log("Girls is Clicked")
 
         getGirlsFromStateFilter()
+
+        state.girlsClicked = true //UPDATE THE STATE THEN RERENDER THE APP
         render()
     })
 
@@ -66,11 +72,11 @@ function listenToGuysEvent(guysElParam) {
 
     guysElParam.addEventListener('click', function(event) {
         event.preventDefault()
-        state.guysClicked = true
         console.log("Guys is Clicked")
 
         getGuysFromStateFilter()
 
+        state.guysClicked = true //UPDATE THE STATE THEN RERENDER THE APP
         render()
     })
 
@@ -80,18 +86,18 @@ function listenToSalesEvent(salesElParam) {
 
     salesElParam.addEventListener('click', function(event) {
         event.preventDefault()
-        state.salesClicked = true
         console.log("Sales is Clicked")
 
         getSalesFromStateFilter()
 
+        state.salesClicked = true //UPDATE THE STATE THEN RERENDER THE APP
         render()
     })
 
 }
 // #endregion
 
-// #region 'SEARCH'
+// #region 'EVENT LISTENER SEARCH'
 function listenToSearchEvent(searchElParam) {
 
     searchElParam.addEventListener('click', function(event) {
@@ -120,6 +126,8 @@ function listenToSubmitSearch(formElParam) {
         state.searchClicked = true
 
         searchCatcher = getNameSearchFromStateFilter(formElParam.search.value)
+
+        state.searchClicked = true //UPDATE THE STATE THEN RERENDER THE APP
         render()
     })
     
@@ -127,7 +135,7 @@ function listenToSubmitSearch(formElParam) {
 
 // #endregion
 
-// #region 'USER'
+// #region 'EVENT LISTENER USER'
 function listenToUserEvent(userElParam) {
     
     userElParam.addEventListener('click', function(event) {
@@ -153,8 +161,7 @@ function listenToSubmitUser(formElParam) {
     formElParam.addEventListener('submit', function(event) {
 
         event.preventDefault()
-        console.log("Sumbit user is Clicked or sumbit")
-        state.userClicked = true
+        console.log("Submit user is Clicked or sumbit")
 
         userCatcher.pop()
         userCatcher.push(getUserCredentialsFromStateFilter(formElParam.email.value, formElParam.password.value))
@@ -167,14 +174,25 @@ function listenToSubmitUser(formElParam) {
             alert(`The email is : ${userCatcher[0][0].id} and also the password is : ${userCatcher[0][0].password}`)
         }
 
+        spanHolderEl.classList.add('show')
+
+        state.userClicked = true
+        state.userShowClass = 'show'
+        state.userName = userCatcher[0][0].firstName
+        spanHolderEl.textContent = state.userName //fixed this BUG LINKING STATE AND DOM THEN RERENDER
+
         render()
 
     })
     
 }
+
+function getSpanEl(spanElParam) {
+    return spanElParam
+}
 // #endregion
 
-// #region 'BAG'
+// #region 'EVENT LISTENER BAG'
 function listenToBagEvent(bagElParam) {
     
     bagElParam.addEventListener('click', function(event) {
@@ -518,6 +536,10 @@ function renderHeader() {
     imgUl2_2.setAttribute('src', './assets/icons/user.png')
     imgUl2_2.setAttribute('alt', '')
 
+    const spanUl2_2 = document.createElement('span')
+    spanUl2_2.setAttribute('class', `span-user-login ${state.userShowClass}`)
+    spanUl2_2.textContent = state.userName
+
     const imgUl2_3 = document.createElement('img')
     imgUl2_3.setAttribute('src', './assets/icons/shopping-bag.png')
     imgUl2_3.setAttribute('alt', '')
@@ -527,13 +549,14 @@ function renderHeader() {
     btnUl2_3.append(imgUl2_3)
 
     liUl2_1.append(btnUl2_1)
-    liUl2_2.append(btnUl2_2)
+    liUl2_2.append(btnUl2_2, spanUl2_2)
     liUl2_3.append(btnUl2_3)
 
     //event listener holder and calling them
     listenToSearchEvent(btnUl2_1)
     listenToUserEvent(btnUl2_2)
     listenToBagEvent(btnUl2_3)
+    spanHolderEl = getSpanEl(spanUl2_2)
 
     ulHeader2.append(liUl2_1, liUl2_2, liUl2_3)
     // #endregion

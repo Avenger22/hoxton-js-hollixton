@@ -291,7 +291,7 @@ header.header-menu button {
     display: grid;
     grid-template-rows: 1fr;
     place-items: center;
-    opacity: 0.8;
+    opacity: 1;
     background-color: rgba(230, 90, 50, 0.3);
 }
 
@@ -359,4 +359,13 @@ header.header-menu button {
     display: grid;
     grid-template-columns: 200px 35px;
     place-items: center;
+}
+
+span.span-user-login {
+    display: none;
+}
+
+span.span-user-login.show {
+    display: inline-block;
+    color: #1d2f55;
 }

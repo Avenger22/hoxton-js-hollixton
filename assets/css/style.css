@@ -187,32 +187,30 @@ header.header-menu button {
 .modal {
     display: grid;
     grid-template: 
-    "h3-modal button-modal" 0.05fr
-    "input-modal input-modal" 0.95fr /
+    "button-modal" 30px
+    "input-modal" 100px /
     0.9fr 0.1fr;
     grid-gap: 20px;
-    background-color: #f1f1f6;
+    background-color: hsl(240, 22%, 95%);
+    height: 250px;
+    width: 500px;
+    place-content: center;
 }
 
-.modal button {
+.modal .header-search {
     grid-area: button-modal;
-    padding: 5px 5px;
+    display: grid;
+    grid-template-columns: 0.9fr 0.1fr;
+    place-items: center;
 }
 
-.modal h3 {
-    grid-area: h3-modal;
-    font-size: 22px;
-    color: #0a0305;
-    font-weight: 900;
-    letter-spacing: 3px;
-}
-
-.modal input {
+.modal .input-search-wrapper {
     grid-area: input-modal;
-    padding-left: 20px;
-    font-size: 18px;
-    color: black;
+    display: grid;
+    grid-template-columns: 1fr;
+    place-items: center;
 }
+
 
 .modal-container-2 {
     height: 100vh;
@@ -234,9 +232,50 @@ header.header-menu button {
 
 .modal-2 {
     display: grid;
-    grid-template-rows: 0.1fr 0.4fr 0.5fr;
-    grid-gap: 20px;
+    grid-template-rows: 0.1fr 0.5fr 30px;
+    grid-gap: 10px;
     background-color: #f1f1f6;
+    height: 250px;
+    width: 500px;
+    place-content: center;
+}
+
+.modal-2 .header-user-modal {
+    display: grid;
+    place-items: center;
+}
+
+.modal-2 .input-user-modal {
+    display: grid;
+    grid-template: 
+    "span-user-1 email-input-user" 30px
+    "span-user-2 password-input-user" 30px /
+    0.2fr 0.8fr;
+    grid-gap: 20px;
+    align-items: center;
+    
+}
+
+.modal-2 .input-user-modal .span-user-1 {
+    grid-area: span-user-1;
+}
+
+.modal-2 .input-user-modal .span-user-2 {
+    grid-area: span-user-2;
+}
+
+.modal-2 .input-user-modal .email-input-user {
+    grid-area: email-input-user;
+}
+
+.modal-2 .input-user-modal .password-input-user {
+    grid-area: password-input-user;
+}
+
+.modal-2 .button-user-modal {
+    display: grid;
+    grid-template-columns: 0.5fr 0.5fr;
+    place-items: center;
 }
 
 .modal-container-3 {
@@ -261,4 +300,7 @@ header.header-menu button {
     display: grid;
     grid-template-rows: 0.1fr 0.4fr 0.5fr;
     grid-gap: 20px;
+    height: 350px;
+    width: 300px;
+    background-color: #f1f1f6;
 }

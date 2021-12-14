@@ -221,8 +221,14 @@ function getUsersArrayFromServer() {
 // #region "RENDERING MODALS"
 function renderSearchModal() {
 
-    const divEl2 = document.createElement('div')
-    divEl2.setAttribute('class', 'modal')
+    const divEl1Modal = document.createElement('div')
+    divEl1Modal.setAttribute('class', 'modal')
+
+    const divHeaderSearch = document.createElement('div')
+    divHeaderSearch.setAttribute('class', 'header-search')
+
+    const divInputSearch = document.createElement('div')
+    divInputSearch.setAttribute('class', 'input-search-wrapper')
 
     const h3El = document.createElement('h3')
     h3El.textContent = 'Seach for your favourite items!'
@@ -237,8 +243,10 @@ function renderSearchModal() {
     const removeBtn = document.createElement('button')
     removeBtn.textContent = 'X'
 
-    divEl2.append(h3El, inputEl, removeBtn)
-    divEl1.append(divEl2)
+    divHeaderSearch.append(h3El, removeBtn)
+    divInputSearch.append(inputEl)
+    divEl1Modal.append(divHeaderSearch, divInputSearch)
+    divEl1.append(divEl1Modal)
     sectionMenusEl.append(divEl1)
 
     listenToRemoveSearch(removeBtn)
@@ -250,13 +258,20 @@ function renderUserModal() {
     const divEl2Modal = document.createElement('div')
     divEl2Modal.setAttribute('class', 'modal-2')
 
+    const divHeaderUser = document.createElement('div')
+    divHeaderUser.setAttribute('class', 'header-user-modal')
+
+    const divInputUser = document.createElement('div')
+    divInputUser.setAttribute('class', 'input-user-modal')
+
+    const divBtnUser = document.createElement('div')
+    divBtnUser.setAttribute('class', 'button-user-modal')
+
     const h3el = document.createElement('h3')
     h3el.textContent = 'Sign In'
 
-    const divInputEl1 = document.createElement('div')
-    divInputEl1.setAttribute('class', 'input-wrapper-user')
-
     const spanEl1 = document.createElement('span')
+    spanEl1.setAttribute('class', 'span-user-1')
     spanEl1.textContent = 'Email:'
 
     const inputEl1 = document.createElement('input')
@@ -266,12 +281,8 @@ function renderUserModal() {
     inputEl1.setAttribute('type', 'email')
     inputEl1.placeholder = 'Enter Email'
 
-    divInputEl1.append(spanEl1, inputEl1)
-
-    const divInputEl2 = document.createElement('div')
-    divInputEl2.setAttribute('class', 'input-wrapper-user')
-
     const spanEl2 = document.createElement('span')
+    spanEl1.setAttribute('class', 'span-user-2')
     spanEl2.textContent = 'Password:'
 
     const inputEl2 = document.createElement('input')
@@ -281,31 +292,70 @@ function renderUserModal() {
     inputEl2.setAttribute('type', 'password')
     inputEl2.placeholder = 'Enter Password'
 
-    divInputEl2.append(spanEl2, inputEl2)
+    const btnSignInEl = document.createElement('button')
+    btnSignInEl.textContent = 'Sign In'
 
-    const divBtnEl = document.createElement('div')
-    divBtnEl.setAttribute('class', 'btn-wrapper-user')
+    const btnRemoveEl = document.createElement('button')
+    btnRemoveEl.textContent = 'X'
 
-    const btnEl = document.createElement('button')
-    btnEl.textContent = 'Sign In'
-
-    const removeBtnEl = document.createElement('button')
-    removeBtnEl.textContent = 'X'
-
-    divBtnEl.append(btnEl, removeBtnEl)
-    divEl2Modal.append(h3el, divInputEl1, divInputEl2, divBtnEl)
+    divHeaderUser.append(h3el)
+    divInputUser.append(spanEl1, inputEl1, spanEl2, inputEl2)
+    divBtnUser.append(btnSignInEl, btnRemoveEl)
+    divEl2Modal.append(divHeaderUser, divInputUser, divBtnUser)
     divEl2.append(divEl2Modal)
     sectionMenusEl.append(divEl2)
 
-    listenToRemoveUser(removeBtnEl)
+    listenToRemoveUser(btnRemoveEl)
 
 }
 
 function renderBagModal() {
 
-    const divEl3 = document.createElement('div')
-    divEl3.setAttribute('class', 'modal-3')
+    const divEl3Modal = document.createElement('div')
+    divEl3Modal.setAttribute('class', 'modal-3')
 
+    const divHeaderEl = document.createElement('div')
+    divHeaderEl.setAttribute('class', 'header-bag')
+
+    const h3El = document.createElement('h3')
+    h3El.textContent = 'Bag'
+    divHeaderEl.append(h3El)
+
+    const divItemEl = document.createElement('div')
+    divItemEl.setAttribute('class', 'item-bag') 
+
+    const imgEl = document.createElement('img')
+    imgEl.setAttribute('src', '')
+    imgEl.setAttribute('alt', '')
+
+    const h4El = document.createElement('h4')
+    h4El.textContent = 'Name of item'
+
+    const spanEl1 = document.createElement('span')
+    spanEl1.setAttribute('class', 'span-1-bag')
+    spanEl1.textContent = '$40'
+
+    const spanEl2 = document.createElement('span')
+    spanEl2.setAttribute('class', 'span-2-bag')
+    spanEl2.textContent = '$21.99'
+
+    const spanEl3 = document.createElement('span')
+    spanEl3.setAttribute('class', 'span-3-bag')
+    spanEl3.textContent = '(x3)'
+
+    const btnRemoveItem = document.createElement('button')
+    btnRemoveItem.textContent = 'Remove'
+
+    divItemEl.append(imgEl, h4El, spanEl1, spanEl2, spanEl3, btnRemoveItem)
+
+    const btnRemoveModal = document.createElement('button')
+    btnRemoveModal.textContent = 'X'
+
+    const btnPay = document.createElement('button')
+    btnPay.textContent = 'Pay now ....'
+
+    divEl3Modal.append(divHeaderEl, divItemEl, btnPay)
+    divEl3.append(divEl3Modal)
 
 }
 // #endregion

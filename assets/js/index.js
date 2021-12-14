@@ -17,6 +17,8 @@ let stockHolderEl = null
 let searchCatcher = []
 let userCatcher = [] 
 let btnCounter = 0
+let bagArray = []
+let bagArrayNoDuplicate = []
 // #endregion
 
 
@@ -237,6 +239,9 @@ function listenToSubmitItemToBag(buttonItemParam, itemObjectParam) {
             state.stockSpanValue += 1
         }
 
+        bagArray.push(itemObjectParam)
+        bagArrayNoDuplicate = [...new Set(bagArray)]
+
         render()
 
     })
@@ -451,32 +456,42 @@ function renderBagModal() {
     h3El.textContent = 'Bag'
     divHeaderEl.append(h3El)
 
-    const divItemEl = document.createElement('div')
-    divItemEl.setAttribute('class', 'item-bag') 
 
-    const imgEl = document.createElement('img')
-    imgEl.setAttribute('src', '')
-    imgEl.setAttribute('alt', '')
+    const divItemWrapperEl = document.createElement('div')
+    divItemWrapperEl.setAttribute('class', 'wrapper-items-bag')
+    divItemWrapperEl.innerHTML = '' //destroy after each rerender then recreate
 
-    const h4El = document.createElement('h4')
-    h4El.textContent = 'Name of item'
+    for (const item of bagArrayNoDuplicate) {
 
-    const spanEl1 = document.createElement('span')
-    spanEl1.setAttribute('class', 'span-1-bag')
-    spanEl1.textContent = '$40'
+        const divItemEl = document.createElement('div')
+        divItemEl.setAttribute('class', 'item-bag') 
 
-    const spanEl2 = document.createElement('span')
-    spanEl2.setAttribute('class', 'span-2-bag')
-    spanEl2.textContent = '$21.99'
+        const imgEl = document.createElement('img')
+        imgEl.setAttribute('src', item.image)
+        imgEl.setAttribute('alt', '')
 
-    const spanEl3 = document.createElement('span')
-    spanEl3.setAttribute('class', 'span-3-bag')
-    spanEl3.textContent = '(x3)'
+        const h4El = document.createElement('h4')
+        h4El.textContent = item.name
 
-    const btnRemoveItem = document.createElement('button')
-    btnRemoveItem.textContent = 'Remove'
+        const spanEl1 = document.createElement('span')
+        spanEl1.setAttribute('class', 'span-1-bag')
+        spanEl1.textContent = item.price
 
-    divItemEl.append(imgEl, h4El, spanEl1, spanEl2, spanEl3, btnRemoveItem)
+        const spanEl2 = document.createElement('span')
+        spanEl2.setAttribute('class', 'span-2-bag')
+        spanEl2.textContent = item.discountedPrice
+
+        const spanEl3 = document.createElement('span')
+        spanEl3.setAttribute('class', 'span-3-bag')
+        spanEl3.textContent = '(x3)'
+
+        const btnRemoveItem = document.createElement('button')
+        btnRemoveItem.textContent = 'Remove'
+
+        divItemEl.append(imgEl, h4El, spanEl1, spanEl2, spanEl3, btnRemoveItem)
+        divItemWrapperEl.append(divItemEl)
+
+    }
 
     const divRemovingEl = document.createElement('div')
     divRemovingEl.setAttribute('class', 'removing-bag')
@@ -488,7 +503,7 @@ function renderBagModal() {
     btnPay.textContent = 'Pay now ....'
 
     divRemovingEl.append(btnPay, btnRemoveModal)
-    divModalWrapper.append(divHeaderEl, divItemEl, divRemovingEl)
+    divModalWrapper.append(divHeaderEl, divItemWrapperEl, divRemovingEl)
     divEl3Modal.append(divModalWrapper)
     divEl3.append(divEl3Modal)
     sectionMenusEl.append(divEl3)

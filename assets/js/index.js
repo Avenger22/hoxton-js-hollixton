@@ -93,7 +93,7 @@ function listenToSearchEvent(searchElParam) {
     searchElParam.addEventListener('click', function(event) {
         event.preventDefault()
         divEl1.classList.add('show')
-        render()
+        // render()
     })
 
 }
@@ -103,9 +103,22 @@ function listenToRemoveSearch(buttonElParam) {
     buttonElParam.addEventListener('click', function(event) {
         event.preventDefault()
         divEl1.classList.remove('show')
-        render()
+        // render()
     })
 
+}
+
+function listenToSubmitSearch(inputElParam) {
+
+    inputElParam.addEventListener('submit', function(event) {
+        event.preventDefault()
+        console.log("Sumbit search is Clicked or sumbit")
+        state.searchClicked = true
+
+        getNameSearchFromStateFilter(inputEl['search'].value)
+        render()
+    })
+    
 }
 
 // #endregion
@@ -116,7 +129,7 @@ function listenToUserEvent(userElParam) {
     userElParam.addEventListener('click', function(event) {
         event.preventDefault()
         divEl2.classList.add('show')
-        render()
+        // render()
     })
 
 }
@@ -126,7 +139,7 @@ function listenToRemoveUser(buttonElParam) {
     buttonElParam.addEventListener('click', function(event) {
         event.preventDefault()
         divEl2.classList.remove('show')
-        render()
+        // render()
     })
 
 }
@@ -138,7 +151,7 @@ function listenToBagEvent(bagElParam) {
     bagElParam.addEventListener('click', function(event) {
         event.preventDefault()
         divEl3.classList.add('show')
-        render()
+        // render()
     })
 
 }
@@ -148,7 +161,7 @@ function listenToRemoveBag(buttonElParam) {
     buttonElParam.addEventListener('click', function(event) {
         event.preventDefault()
         divEl3.classList.remove('show')
-        render()
+        // render()
     })
 
 }
@@ -189,6 +202,15 @@ function getSalesFromStateFilter() {
     let stateSalesArray = []
     return stateSalesArray = state.store.filter(function(item) {
         return item.hasOwnProperty('discountedPrice')
+    })
+
+}
+
+function getNameSearchFromStateFilter(InputValueParam) {
+
+    let nameSearchArray = []
+    return nameSearchArray = state.store.filter(function(item) {
+        return item.includes(InputValueParam)
     })
 
 }
@@ -256,6 +278,7 @@ function renderSearchModal() {
     sectionMenusEl.append(divEl1)
 
     listenToRemoveSearch(removeBtn)
+    listenToSubmitSearch(inputEl)
 
 }
 
@@ -582,14 +605,14 @@ function renderFooter() {
 // #region "RENDER AND INIT"
 function render() {
 
-    //destroy everything in the html and the page
+    //destroy everything in the html and the page, also destroyd the modals
     sectionMenusEl.innerHTML = ''
     divEl1.innerHTML = ''
     divEl2.innerHTML = ''
     divEl3.innerHTML = ''
 
     // #region "CONDITIONAL FOR GIRLS CLICKED"
-    if (state.girlsClicked === true && state.guysClicked === false && state.salesClicked === false) {
+    if (state.girlsClicked === true && state.guysClicked === false && state.salesClicked === false && state.searchClicked === false) {
 
         const girlsArrayValue = getGirlsFromStateFilter()
         //recreate everything in html every time render is called, basically rerendering
@@ -606,8 +629,32 @@ function render() {
     }
     // #endregion
 
+    // #region "CONDITIONAL FOR GIRLS WITH SERCH WITHIN RENDERING"
+    else if (state.girlsClicked === true && state.guysClicked === false && state.salesClicked === false && state.searchClicked === true) {
+
+        const girlsArrayValue = getGirlsFromStateFilter()
+        const searchArray = getNameSearchFromStateFilter()
+        girlsArrayValue = girlsArrayValue.filter(function(item) {
+            return item.includes(searchArray)
+        })
+
+        //recreate everything in html every time render is called, basically rerendering
+        renderHeader()
+        renderMain(girlsArrayValue)
+        renderFooter()
+        renderSearchModal()
+        renderUserModal()
+        renderBagModal()
+
+        console.log('Changing here the state from true to false in order to achieve app functionality also search wihtin')
+        state.girlsClicked = false
+        state.searchClicked = false
+
+    }
+    // #endregion
+
     // #region "CONDITIONAL FOR GUYS CLICKED"
-    else if (state.girlsClicked === false && state.guysClicked === true && state.salesClicked === false) {
+    else if (state.girlsClicked === false && state.guysClicked === true && state.salesClicked === false && state.searchClicked === false) {
 
         guysArrayValue = getGuysFromStateFilter()
         //recreate everything in html every time render is called, basically rerendering
@@ -625,7 +672,7 @@ function render() {
     // #endregion
 
     // #region "CONDITIONAL FOR SALES CLICKED"
-    else if (state.girlsClicked === false && state.guysClicked === false && state.salesClicked === true) {
+    else if (state.girlsClicked === false && state.guysClicked === false && state.salesClicked === true && state.searchClicked === false) {
 
         salesArrayValue = getSalesFromStateFilter()
         //recreate everything in html every time render is called, basically rerendering
@@ -642,8 +689,8 @@ function render() {
     }
     // #endregion
 
-    // #region "CONDITIONAL ELSE FOR NORMAL RENDERING NO CLICKING FROM STATE"
-    else {
+    // #region "CONDITIONAL FOR NORMAL RENDERING NO CLICKING FROM STATE"
+    else if(state.girlsClicked === false && state.guysClicked === false && state.salesClicked === false && state.searchClicked === false) {
         deffaultArrayValue = getDeffaultLogoFilter()
         //recreate everything in html every time render is called, basically rerendering
         renderHeader()

@@ -9,6 +9,8 @@ divEl2.setAttribute('class', 'modal-container-2')
 
 const divEl3 = document.createElement('div')
 divEl3.setAttribute('class', 'modal-container-3')
+
+let searchCatcher = [] //super crucial for catching each name and passing it in render in else if, problem is because the filter function had param and passing was hard so this solved
 // #endregion
 
 
@@ -108,14 +110,14 @@ function listenToRemoveSearch(buttonElParam) {
 
 }
 
-function listenToSubmitSearch(inputElParam) {
+function listenToSubmitSearch(formElParam) {
 
-    inputElParam.addEventListener('submit', function(event) {
+    formElParam.addEventListener('submit', function(event) {
         event.preventDefault()
         console.log("Sumbit search is Clicked or sumbit")
         state.searchClicked = true
 
-        getNameSearchFromStateFilter(inputEl['search'].value)
+        searchCatcher = getNameSearchFromStateFilter(formElParam.search.value)
         render()
     })
     
@@ -210,10 +212,11 @@ function getNameSearchFromStateFilter(InputValueParam) {
 
     let nameSearchArray = []
     return nameSearchArray = state.store.filter(function(item) {
-        return item.includes(InputValueParam)
+        return item.name === InputValueParam
     })
 
 }
+
 // #endregion
 
 // #endregion
@@ -255,8 +258,8 @@ function renderSearchModal() {
     const divHeaderSearch = document.createElement('div')
     divHeaderSearch.setAttribute('class', 'header-search')
 
-    const divInputSearch = document.createElement('div')
-    divInputSearch.setAttribute('class', 'input-search-wrapper')
+    const formSearch = document.createElement('form')
+    formSearch.setAttribute('class', 'form-search')
 
     const h3El = document.createElement('h3')
     h3El.textContent = 'Seach for your favourite items!'
@@ -268,17 +271,20 @@ function renderSearchModal() {
     inputEl.setAttribute('type', 'text')
     inputEl.placeholder = 'Search ....'
 
+    const btnSumbitEl = document.createElement('button')
+    btnSumbitEl.textContent = 'Submit'
+
     const removeBtn = document.createElement('button')
     removeBtn.textContent = 'X'
 
     divHeaderSearch.append(h3El, removeBtn)
-    divInputSearch.append(inputEl)
-    divEl1Modal.append(divHeaderSearch, divInputSearch)
+    formSearch.append(inputEl, btnSumbitEl)
+    divEl1Modal.append(divHeaderSearch, formSearch)
     divEl1.append(divEl1Modal)
     sectionMenusEl.append(divEl1)
 
     listenToRemoveSearch(removeBtn)
-    listenToSubmitSearch(inputEl)
+    listenToSubmitSearch(formSearch)
 
 }
 
@@ -629,25 +635,20 @@ function render() {
     }
     // #endregion
 
-    // #region "CONDITIONAL FOR GIRLS WITH SERCH WITHIN RENDERING"
-    else if (state.girlsClicked === true && state.guysClicked === false && state.salesClicked === false && state.searchClicked === true) {
+    // #region "CONDITIONAL FOR NAME SEARCH CLICKED"
+    else if (state.girlsClicked === false && state.guysClicked === false && state.salesClicked === false && state.searchClicked === true) {
 
-        const girlsArrayValue = getGirlsFromStateFilter()
-        const searchArray = getNameSearchFromStateFilter()
-        girlsArrayValue = girlsArrayValue.filter(function(item) {
-            return item.includes(searchArray)
-        })
+        let searchArray = searchCatcher
 
         //recreate everything in html every time render is called, basically rerendering
         renderHeader()
-        renderMain(girlsArrayValue)
+        renderMain(searchArray)
         renderFooter()
         renderSearchModal()
         renderUserModal()
         renderBagModal()
 
         console.log('Changing here the state from true to false in order to achieve app functionality also search wihtin')
-        state.girlsClicked = false
         state.searchClicked = false
 
     }

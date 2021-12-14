@@ -442,3 +442,12 @@ span.span-user-login.show {
     display: inline-block;
     color: #1d2f55;
 }
+
+span.span-bag-stock {
+    display: none;
+}
+
+span.span-bag-stock.show {
+    display: inline-block;
+    color: #1d2f55;
+}

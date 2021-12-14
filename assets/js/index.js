@@ -11,6 +11,7 @@ const divEl3 = document.createElement('div')
 divEl3.setAttribute('class', 'modal-container-3')
 
 let spanHolderEl = null
+let stockHolderEl = null
 
 //super crucial for catching each name and passing it in render in else if, problem is because the filter function had param and passing was hard so this solved
 let searchCatcher = []
@@ -25,7 +26,9 @@ const state = {
     users: [],
     bagItems: [],
     userName: null,
+    stockSpanValue: null,
     userShowClass: null,
+    stockShowClass: null,
     girlsClicked: false,
     guysClicked: false,
     salesClicked: false,
@@ -123,7 +126,6 @@ function listenToSubmitSearch(formElParam) {
     formElParam.addEventListener('submit', function(event) {
         event.preventDefault()
         console.log("Sumbit search is Clicked or sumbit")
-        state.searchClicked = true
 
         searchCatcher = getNameSearchFromStateFilter(formElParam.search.value)
 
@@ -211,6 +213,38 @@ function listenToRemoveBag(buttonElParam) {
         // render()
     })
 
+}
+
+function listenToSubmitItemToBag(buttonItemParam, itemObjectParam) {
+
+    buttonItemParam.addEventListener('click', function(event) {
+        event.preventDefault()
+        console.log("item button is Clicked")
+
+        stockHolderEl.classList.add('show')
+        state.stockShowClass = 'show'
+        state.stockSpanValue += 1
+        itemObjectParam.stock -= 1
+        stockHolderEl.textContent = state.stockSpanValue
+
+        if (itemObjectParam.stock < 0) {
+            itemObjectParam.stock = 0 //removing negative values from span and stock ruining the state object
+            state.stockSpanValue += 0
+        }
+
+        // else {
+        //     state.stockSpanValue += 1
+        //     itemObjectParam.stock -= 1
+        // }
+
+        render()
+
+    })
+    
+}
+
+function getStockSpanEl(stockElParam) {
+    return stockElParam
 }
 // #endregion
 
@@ -540,6 +574,10 @@ function renderHeader() {
     spanUl2_2.setAttribute('class', `span-user-login ${state.userShowClass}`)
     spanUl2_2.textContent = state.userName
 
+    const spanUl2_3 = document.createElement('span')
+    spanUl2_3.setAttribute('class', `span-bag-stock ${state.stockShowClass}`)
+    spanUl2_3.textContent = state.stockSpanValue
+
     const imgUl2_3 = document.createElement('img')
     imgUl2_3.setAttribute('src', './assets/icons/shopping-bag.png')
     imgUl2_3.setAttribute('alt', '')
@@ -550,13 +588,14 @@ function renderHeader() {
 
     liUl2_1.append(btnUl2_1)
     liUl2_2.append(btnUl2_2, spanUl2_2)
-    liUl2_3.append(btnUl2_3)
+    liUl2_3.append(btnUl2_3, spanUl2_3)
 
     //event listener holder and calling them
     listenToSearchEvent(btnUl2_1)
     listenToUserEvent(btnUl2_2)
     listenToBagEvent(btnUl2_3)
     spanHolderEl = getSpanEl(spanUl2_2)
+    stockHolderEl = getStockSpanEl(spanUl2_3)
 
     ulHeader2.append(liUl2_1, liUl2_2, liUl2_3)
     // #endregion
@@ -622,6 +661,8 @@ function renderMain(storeArrayParam) {
         if (item.hasOwnProperty('discountedPrice')) {
             divEl3.append(imgEl, h2El2, spanEl1, spanEl2, spanEl3, spanEl4, btnItemEl)
             divEl2.append(divEl3)
+
+            listenToSubmitItemToBag(btnItemEl, item)
         }
 
         else {
@@ -630,6 +671,8 @@ function renderMain(storeArrayParam) {
 
             divEl3.append(imgEl, h2El2, spanEl1, spanEl3, spanEl4, btnItemEl)
             divEl2.append(divEl3)
+
+            listenToSubmitItemToBag(btnItemEl, item)
         }
 
     }

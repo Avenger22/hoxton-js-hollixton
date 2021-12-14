@@ -16,6 +16,7 @@ let stockHolderEl = null
 //super crucial for catching each name and passing it in render in else if, problem is because the filter function had param and passing was hard so this solved
 let searchCatcher = []
 let userCatcher = [] 
+let btnCounter = 0
 // #endregion
 
 
@@ -220,22 +221,21 @@ function listenToSubmitItemToBag(buttonItemParam, itemObjectParam) {
     buttonItemParam.addEventListener('click', function(event) {
         event.preventDefault()
         console.log("item button is Clicked")
+        btnCounter++
 
         stockHolderEl.classList.add('show')
         state.stockShowClass = 'show'
-        state.stockSpanValue += 1
+
         itemObjectParam.stock -= 1
         stockHolderEl.textContent = state.stockSpanValue
 
         if (itemObjectParam.stock < 0) {
             itemObjectParam.stock = 0 //removing negative values from span and stock ruining the state object
-            state.stockSpanValue += 0
         }
 
-        // else {
-        //     state.stockSpanValue += 1
-        //     itemObjectParam.stock -= 1
-        // }
+        else {
+            state.stockSpanValue += 1
+        }
 
         render()
 

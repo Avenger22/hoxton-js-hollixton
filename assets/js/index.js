@@ -10,7 +10,9 @@ divEl2.setAttribute('class', 'modal-container-2')
 const divEl3 = document.createElement('div')
 divEl3.setAttribute('class', 'modal-container-3')
 
-let searchCatcher = [] //super crucial for catching each name and passing it in render in else if, problem is because the filter function had param and passing was hard so this solved
+//super crucial for catching each name and passing it in render in else if, problem is because the filter function had param and passing was hard so this solved
+let searchCatcher = []
+let userCatcher = [] 
 // #endregion
 
 
@@ -145,6 +147,31 @@ function listenToRemoveUser(buttonElParam) {
     })
 
 }
+
+function listenToSubmitUser(formElParam) {
+
+    formElParam.addEventListener('submit', function(event) {
+
+        event.preventDefault()
+        console.log("Sumbit user is Clicked or sumbit")
+        state.userClicked = true
+
+        userCatcher.pop()
+        userCatcher.push(getUserCredentialsFromStateFilter(formElParam.email.value, formElParam.password.value))
+
+        if(userCatcher.length === 0) {
+            alert('No email or user found with these credentials')
+        }
+
+        else {
+            alert(`The email is : ${userCatcher[0][0].id} and also the password is : ${userCatcher[0][0].password}`)
+        }
+
+        render()
+
+    })
+    
+}
 // #endregion
 
 // #region 'BAG'
@@ -217,6 +244,14 @@ function getNameSearchFromStateFilter(InputValueParam) {
 
 }
 
+function getUserCredentialsFromStateFilter(emailParam, passwordParam) {
+
+    let userCredentialsArray = []
+    return userCredentialsArray = state.users.filter(function(item) {
+        return item.id === emailParam && item.password === passwordParam
+    })
+
+}
 // #endregion
 
 // #endregion
@@ -333,14 +368,19 @@ function renderUserModal() {
     const btnRemoveEl = document.createElement('button')
     btnRemoveEl.textContent = 'X'
 
+    const formUser = document.createElement('form')
+    formUser.setAttribute('class', 'form-user')
+
     divHeaderUser.append(h3el)
     divInputUser.append(spanEl1, inputEl1, spanEl2, inputEl2)
     divBtnUser.append(btnSignInEl, btnRemoveEl)
-    divEl2Modal.append(divHeaderUser, divInputUser, divBtnUser)
+    formUser.append(divInputUser, divBtnUser)
+    divEl2Modal.append(divHeaderUser, formUser)
     divEl2.append(divEl2Modal)
     sectionMenusEl.append(divEl2)
 
     listenToRemoveUser(btnRemoveEl)
+    listenToSubmitUser(formUser)
 
 }
 

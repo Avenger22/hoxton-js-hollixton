@@ -135,6 +135,12 @@ function listenToRemoveUser(buttonElParam) {
 // #region 'BAG'
 function listenToBagEvent(bagElParam) {
     
+    bagElParam.addEventListener('click', function(event) {
+        event.preventDefault()
+        divEl3.classList.add('show')
+        render()
+    })
+
 }
 
 function listenToRemoveBag(buttonElParam) {
@@ -317,6 +323,9 @@ function renderBagModal() {
     const divHeaderEl = document.createElement('div')
     divHeaderEl.setAttribute('class', 'header-bag')
 
+    const divModalWrapper = document.createElement('div')
+    divModalWrapper.setAttribute('class', 'modal-wrapper-3')
+
     const h3El = document.createElement('h3')
     h3El.textContent = 'Bag'
     divHeaderEl.append(h3El)
@@ -348,14 +357,22 @@ function renderBagModal() {
 
     divItemEl.append(imgEl, h4El, spanEl1, spanEl2, spanEl3, btnRemoveItem)
 
+    const divRemovingEl = document.createElement('div')
+    divRemovingEl.setAttribute('class', 'removing-bag')
+
     const btnRemoveModal = document.createElement('button')
     btnRemoveModal.textContent = 'X'
 
     const btnPay = document.createElement('button')
     btnPay.textContent = 'Pay now ....'
 
-    divEl3Modal.append(divHeaderEl, divItemEl, btnPay)
+    divRemovingEl.append(btnPay, btnRemoveModal)
+    divModalWrapper.append(divHeaderEl, divItemEl, divRemovingEl)
+    divEl3Modal.append(divModalWrapper)
     divEl3.append(divEl3Modal)
+    sectionMenusEl.append(divEl3)
+
+    listenToRemoveBag(btnRemoveModal)
 
 }
 // #endregion

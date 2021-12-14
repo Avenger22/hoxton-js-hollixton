@@ -298,9 +298,65 @@ header.header-menu button {
 
 .modal-3 {
     display: grid;
-    grid-template-rows: 0.1fr 0.4fr 0.5fr;
+    grid-template-rows: 1fr;
     grid-gap: 20px;
-    height: 350px;
-    width: 300px;
+    height: 500px;
+    width: 800px;
     background-color: #f1f1f6;
+    place-items: center;
+}
+
+.modal-wrapper-3 {
+    display: grid;
+    grid-template-rows: 0.1fr 0.5fr 50px;
+    grid-gap: 20px;
+    place-items: center;
+}
+
+.modal-3 .header-bag {
+    display: grid;
+    grid-template-columns: 1fr;
+    place-items: center;
+    padding-top: 50px;
+}
+
+.modal-3 .item-bag {
+    display: grid;
+    grid-template:
+    "img-item-bag h4-item-bag h4-item-bag h4-item-bag" 50px
+    "img-item-bag span-1-item-bag span-2-item-bag span-3-item-bag" 50px
+    "img-item-bag button-item-bag button-item-bag button-item-bag" 50px /
+    150px 50px 50px 50px ;
+    /* align-items: center; */
+}
+
+.item-bag img {
+    grid-area: img-item-bag;
+    height: 100px;
+}
+
+.item-bag h4 {
+    grid-area: h4-item-bag;
+}
+
+.item-bag .span-1-bag {
+    grid-area: span-1-item-bag;
+}
+
+.item-bag .span-2-bag {
+    grid-area: span-2-item-bag;
+}
+
+.item-bag .span-3-bag {
+    grid-area: span-3-item-bag;
+}
+
+.item-bag button {
+    grid-area: button-item-bag;
+}
+
+.modal-3 .removing-bag {
+    display: grid;
+    grid-template-columns: 200px 35px;
+    place-items: center;
 }

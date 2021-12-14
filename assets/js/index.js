@@ -615,9 +615,12 @@ function renderMain(storeArrayParam) {
         spanEl4.setAttribute('class', 'span-4')
         spanEl4.textContent = `Type For ${item.type}`
 
+        const btnItemEl = document.createElement('button')
+        btnItemEl.textContent = 'Add to bag'
+
         //now we check if an propery in in the object to see discounted price or not
         if (item.hasOwnProperty('discountedPrice')) {
-            divEl3.append(imgEl, h2El2, spanEl1, spanEl2, spanEl3, spanEl4)
+            divEl3.append(imgEl, h2El2, spanEl1, spanEl2, spanEl3, spanEl4, btnItemEl)
             divEl2.append(divEl3)
         }
 
@@ -625,7 +628,7 @@ function renderMain(storeArrayParam) {
             spanEl1.style.color = '#000'
             spanEl1.style.textDecoration = 'none'
 
-            divEl3.append(imgEl, h2El2, spanEl1, spanEl3, spanEl4)
+            divEl3.append(imgEl, h2El2, spanEl1, spanEl3, spanEl4, btnItemEl)
             divEl2.append(divEl3)
         }
 

@@ -82,7 +82,7 @@ main.main-menu {
 .store-items-wrapper {
     display: grid;
     grid-template-columns: 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr;
-    grid-gap: 50px 10px;
+    grid-gap: 70px 10px;
 
     padding-left: 35px;
 }
@@ -96,12 +96,14 @@ main.main-menu {
     /* height: 250px; */
     display: grid;
     grid-template: 
-    "img img" 0.8fr
-    "h2 h2" 0.1fr
-    "span-1 span-2" 0.1fr /
+    "img img" 0.55fr
+    "h2 h2" 0.2fr
+    "span-1 span-2" 0.05fr 
+    "button button" 0.1fr 
+    "span-3 span-4" 0.1fr /
     0.5fr 0.5fr;
 
-    grid-gap: 15px;
+    grid-gap: 10px;
 }
 
 .store-item img {
@@ -111,17 +113,50 @@ main.main-menu {
     height: 250px;
 }
 
+.store-item button {
+    grid-area: button;
+    padding: 10px;
+    color: #fff;
+    background-color: #c22048;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+
+.store-item button:hover {
+    color: rgb(14, 13, 13);
+    background-color: #c0b3b6;
+    transition: 1s;
+    -webkit-transition: 1s;
+    -moz-transition: 1s;
+    -ms-transition: 1s;
+    -o-transition: 1s;
+}
+
+.store-item span.span-3 {
+    grid-area: span-3;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.store-item span.span-4 {
+    grid-area: span-4;
+    font-size: 14px;
+    font-weight: 700;
+}
+
 .store-item h2 {
     grid-area: h2;
-    color: #1d2f55;
+    color: #11192a;
+    font-size: 18px;
 }
 
 .store-item span.span-1 {
     grid-area: span-1;
-    color: #cac0c3;
+    color: #95848a;
     font-size: 16px;
     font-weight: 700;
-    text-decoration: underline;
+    text-decoration: line-through;
 }
 
 .store-item span.span-2 {
@@ -197,11 +232,27 @@ header.header-menu button {
     place-content: center;
 }
 
+.modal input {
+    font-size: 16px;
+    outline: none;
+    border: none;
+    height: 30px;
+}
+
+.modal button {
+    padding: 10px 10px;
+    background-color: #c22048;
+    color: #fff;
+    border: none;
+    outline: none;
+}
+
 .modal .header-search {
     grid-area: button-modal;
     display: grid;
     grid-template-columns: 0.9fr 0.1fr;
     place-items: center;
+    grid-gap: 15px;
 }
 
 .modal .input-search-wrapper {
@@ -209,6 +260,7 @@ header.header-menu button {
     display: grid;
     grid-template-columns: 1fr;
     place-items: center;
+    /* grid-gap: 15px; */
 }
 
 
@@ -240,6 +292,27 @@ header.header-menu button {
     place-content: center;
 }
 
+.modal-2 form {
+    display: grid;
+    grid-template-rows: 0.5fr 0.5fr;
+    grid-gap: 30px;
+}
+
+.modal-2 input {
+    height: 50px;
+    outline: none;
+    border: none;
+    font-size: 18px;
+}
+
+.modal-2 button {
+    color: #fff;
+    background-color: #c22048;
+    padding: 15px 15px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+}
 .modal-2 .header-user-modal {
     display: grid;
     place-items: center;

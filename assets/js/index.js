@@ -41,9 +41,11 @@ const state = {
     stockShowClass: null,
 
     //checking for the render in render() lots of conditionals
-    girlsClicked: false,
-    guysClicked: false,
-    salesClicked: false,
+    // girlsClicked: false,
+    // guysClicked: false,
+    // salesClicked: false,
+
+    filterClicked: '',
 
     //here for 3 modals state and dom linking
     searchClicked: false,
@@ -67,6 +69,7 @@ function listenToLogoEvent(logoElParam) {
 
         getDeffaultLogoFilter()
 
+        state.filterClicked = 'Hollixton'
         render()
     })
 
@@ -80,7 +83,7 @@ function listenToGirlsEvent(girlsElParam) {
 
         getGirlsFromStateFilter()
 
-        state.girlsClicked = true //UPDATE THE STATE THEN RERENDER THE APP
+        state.filterClicked = 'Girls' //UPDATE THE STATE THEN RERENDER THE APP
         render()
     })
 
@@ -94,7 +97,7 @@ function listenToGuysEvent(guysElParam) {
 
         getGuysFromStateFilter()
 
-        state.guysClicked = true //UPDATE THE STATE THEN RERENDER THE APP
+        state.filterClicked = 'Guys' //UPDATE THE STATE THEN RERENDER THE APP
         render()
     })
 
@@ -108,7 +111,7 @@ function listenToSalesEvent(salesElParam) {
 
         getSalesFromStateFilter()
 
-        state.salesClicked = true //UPDATE THE STATE THEN RERENDER THE APP
+        state.filterClicked = 'Sales' //UPDATE THE STATE THEN RERENDER THE APP
         render()
     })
 
@@ -853,14 +856,14 @@ function renderMainItem(itemObjectParam, divWrapperParam) {
 // #region "RENDER AND INIT"
 function render() {
 
-    //destroy everything in the html and the page, also destroyd the modals
+    //destroy everything in the html and the page, also destroyed the modals
     sectionMenusEl.innerHTML = ''
     divEl1.innerHTML = ''
     divEl2.innerHTML = ''
     divEl3.innerHTML = ''
 
     // #region "CONDITIONAL FOR GIRLS CLICKED"
-    if (state.girlsClicked === true && state.guysClicked === false && state.salesClicked === false && state.searchClicked === false) {
+    if (state.filterClicked = 'Girls' && state.searchClicked === false) {
 
         const girlsArrayValue = getGirlsFromStateFilter()
         //recreate everything in html every time render is called, basically rerendering
@@ -872,13 +875,13 @@ function render() {
         renderBagModal()
 
         console.log('Changing here the state from true to false in order to achieve app functionality')
-        state.girlsClicked = false
+        state.filterClicked = ''
 
     }
     // #endregion
 
     // #region "CONDITIONAL FOR NAME SEARCH CLICKED"
-    else if (state.girlsClicked === false && state.guysClicked === false && state.salesClicked === false && state.searchClicked === true) {
+    else if (state.filterClicked = 'Hollixton' && state.searchClicked === true) {
 
         let searchArray = state.searchCatcher
 
@@ -897,7 +900,7 @@ function render() {
     // #endregion
 
     // #region "CONDITIONAL FOR GUYS CLICKED"
-    else if (state.girlsClicked === false && state.guysClicked === true && state.salesClicked === false && state.searchClicked === false) {
+    else if (state.filterClicked = 'Guys' && state.searchClicked === false) {
 
         guysArrayValue = getGuysFromStateFilter()
         //recreate everything in html every time render is called, basically rerendering
@@ -909,13 +912,13 @@ function render() {
         renderBagModal()
 
         console.log('Changing here the state from true to false in order to achieve app functionality')
-        state.guysClicked = false
+        state.filterClicked = ''
 
     }
     // #endregion
 
     // #region "CONDITIONAL FOR SALES CLICKED"
-    else if (state.girlsClicked === false && state.guysClicked === false && state.salesClicked === true && state.searchClicked === false) {
+    else if (state.filterClicked = 'Sales' && state.searchClicked === false) {
 
         salesArrayValue = getSalesFromStateFilter()
         //recreate everything in html every time render is called, basically rerendering
@@ -927,13 +930,14 @@ function render() {
         renderBagModal()
 
         console.log('Changing here the state from true to false in order to achieve app functionality')
-        state.salesClicked = false
+        state.filterClicked = ''
 
     }
     // #endregion
 
-    // #region "CONDITIONAL FOR NORMAL RENDERING NO CLICKING FROM STATE"
-    else if(state.girlsClicked === false && state.guysClicked === false && state.salesClicked === false && state.searchClicked === false) {
+    // #region "CONDITIONAL FOR NORMAL or the HOLLIXTON RENDERING NO CLICKING FROM STATE"
+    else if(state.filterClicked= 'Hollixton' && state.searchClicked === false) {
+
         deffaultArrayValue = getDeffaultLogoFilter()
         //recreate everything in html every time render is called, basically rerendering
         renderHeader()
@@ -942,6 +946,9 @@ function render() {
         renderSearchModal()
         renderUserModal()
         renderBagModal()
+
+        state.filterClicked = ''
+
     }
     // #endregion
 

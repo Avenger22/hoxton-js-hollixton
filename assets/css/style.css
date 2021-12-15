@@ -479,3 +479,10 @@ span.span-bag-stock.show {
     font-size: 20px;
     font-weight: 900;
 }
+
+span.new-item-date {
+    font-size: 16px;
+    color: #c22048;
+    font-style: italic;
+    font-weight: 900;
+}

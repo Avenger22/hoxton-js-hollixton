@@ -1,6 +1,7 @@
 // #region "-----GLOBAL VARIABLES-----"
 const sectionMenusEl = document.querySelector('section.container-menus')
 
+//these three divs are MODALS, so i use them here as global to acces them everywhere in the app
 const divEl1 = document.createElement('div')
 divEl1.setAttribute('class', 'modal-container')
 
@@ -10,13 +11,8 @@ divEl2.setAttribute('class', 'modal-container-2')
 const divEl3 = document.createElement('div')
 divEl3.setAttribute('class', 'modal-container-3')
 
-let spanHolderEl = null
-let stockHolderEl = null
-
-//super crucial for catching each name and passing it in render in else if, problem is because the filter function had param and passing was hard so this solved
-let searchCatcher = []
-let userCatcher = [] 
-let btnCounter = 0
+let spanHolderEl = null //this is important to hold the stock span EL when its rendered so i can acces it and use it in other parts of app
+let stockHolderEl = null //same as above
 // #endregion
 
 
@@ -32,6 +28,10 @@ const state = {
     bagItems: [],
     bagItemQuantity: [],
 
+    //super crucial for catching each name and passing it in render in else if, problem is because the filter function had param and passing was hard so this solved
+    searchCatcher: [],
+    userCatcher: [],
+
     //checking to show the username after login
     userName: null,
     userShowClass: null,
@@ -44,6 +44,8 @@ const state = {
     girlsClicked: false,
     guysClicked: false,
     salesClicked: false,
+
+    //here for 3 modals state and dom linking
     searchClicked: false,
     userClicked: false,
     bagClicked: false
@@ -118,6 +120,7 @@ function listenToSearchEvent(searchElParam) {
 
     searchElParam.addEventListener('click', function(event) {
         event.preventDefault()
+        // state.searchClicked = true //UPDATE THE STATE THEN RERENDER THE APP
         divEl1.classList.add('show')
         // render()
     })
@@ -128,6 +131,7 @@ function listenToRemoveSearch(buttonElParam) {
 
     buttonElParam.addEventListener('click', function(event) {
         event.preventDefault()
+        // state.searchClicked = true //UPDATE THE STATE THEN RERENDER THE APP
         divEl1.classList.remove('show')
         // render()
     })
@@ -140,9 +144,9 @@ function listenToSubmitSearch(formElParam) {
         event.preventDefault()
         console.log("Sumbit search is Clicked or sumbit")
 
-        searchCatcher = getNameSearchFromStateFilter(formElParam.search.value)
+        //this returns the filtered array with only the name on input modal store in state change it rerender
+        state.searchCatcher = getNameSearchFromStateFilter(formElParam.search.value)
 
-        state.searchClicked = true //UPDATE THE STATE THEN RERENDER THE APP
         render()
     })
     
@@ -155,6 +159,7 @@ function listenToUserEvent(userElParam) {
     
     userElParam.addEventListener('click', function(event) {
         event.preventDefault()
+        // state.userClicked = true
         divEl2.classList.add('show')
         // render()
     })
@@ -165,6 +170,7 @@ function listenToRemoveUser(buttonElParam) {
 
     buttonElParam.addEventListener('click', function(event) {
         event.preventDefault()
+        // state.userClicked = false
         divEl2.classList.remove('show')
         // render()
     })
@@ -178,22 +184,21 @@ function listenToSubmitUser(formElParam) {
         event.preventDefault()
         console.log("Submit user is Clicked or sumbit")
 
-        userCatcher.pop()
-        userCatcher.push(getUserCredentialsFromStateFilter(formElParam.email.value, formElParam.password.value))
+        state.userCatcher.pop()
+        state.userCatcher.push(getUserCredentialsFromStateFilter(formElParam.email.value, formElParam.password.value))
 
-        if(userCatcher.length === 0) {
+        if(state.userCatcher.length === 0) {
             alert('No email or user found with these credentials')
         }
 
         else {
-            alert(`The email is : ${userCatcher[0][0].id} and also the password is : ${userCatcher[0][0].password}`)
+            alert(`The email is : ${state.userCatcher[0][0].id} and also the password is : ${state.userCatcher[0][0].password}`)
         }
 
         spanHolderEl.classList.add('show')
 
-        state.userClicked = true
         state.userShowClass = 'show'
-        state.userName = userCatcher[0][0].firstName
+        state.userName = state.userCatcher[0][0].firstName
         spanHolderEl.textContent = state.userName //fixed this BUG LINKING STATE AND DOM THEN RERENDER
 
         render()
@@ -212,6 +217,7 @@ function listenToBagEvent(bagElParam) {
     
     bagElParam.addEventListener('click', function(event) {
         event.preventDefault()
+        // state.bagClicked = true
         divEl3.classList.add('show')
         // render()
     })
@@ -222,6 +228,7 @@ function listenToRemoveBag(buttonElParam) {
 
     buttonElParam.addEventListener('click', function(event) {
         event.preventDefault()
+        state.bagClicked = false
         divEl3.classList.remove('show')
         // render()
     })
@@ -306,81 +313,70 @@ function getStockSpanEl(stockElParam) {
 function getDeffaultLogoFilter() {
 
     let stateLogoDeffaultArray = []
-    return stateLogoDeffaultArray = state.store.filter(function(item) {
-        return item
-    })
+    return stateLogoDeffaultArray = state.store.filter((item) => item)
 
 }
 
 function getGirlsFromStateFilter() {
 
     let stateGirlsArray = []
-    return stateGirlsArray = state.store.filter(function(item) {
-        return item.type === 'Girls'
-    })
+    // return stateGirlsArray = state.store.filter(function(item) {
+    //     return item.type === 'Girls'
+    // })
+
+    return stateGirlsArray = state.store.filter((item) => item.type === 'Girls')
 
 }
 
 function getGuysFromStateFilter() {
 
     let stateGuysArray = []
-    return stateGuysArray = state.store.filter(function(item) {
-        return item.type === 'Guys'
-    })
+    return stateGuysArray = state.store.filter((item) => item.type === 'Guys')
 
 }
 
 function getSalesFromStateFilter() {
 
     let stateSalesArray = []
-    return stateSalesArray = state.store.filter(function(item) {
-        return item.hasOwnProperty('discountedPrice')
-    })
+    return stateSalesArray = state.store.filter((item) => item.hasOwnProperty('discountedPrice'))
 
 }
 
 function getNameSearchFromStateFilter(InputValueParam) {
 
     let nameSearchArray = []
-    return nameSearchArray = state.store.filter(function(item) {
-        return item.name === InputValueParam
-    })
+    return nameSearchArray = state.store.filter((item) => item.name === InputValueParam)
 
 }
 
 function getUserCredentialsFromStateFilter(emailParam, passwordParam) {
 
     let userCredentialsArray = []
-    return userCredentialsArray = state.users.filter(function(item) {
-        return item.id === emailParam && item.password === passwordParam
-    })
+    return userCredentialsArray = state.users.filter((item) => item.id === emailParam && item.password === passwordParam)
 
 }
 
 function getDeletedUsersFromBag(itemObjectNameParam) {
 
     let bagArrayFiltered = []
-    return bagArrayFiltered = state.bagItems.filter(function (item) {
-        return item.name !== itemObjectNameParam //my mistake BUG was here so the argument was object.name i mistaken as object.name.name and filter didnt show anythig wront
-    })
+    //my mistake BUG was here so the argument was object.name i mistaken as object.name.name and filter didnt show anythig wront
+    return bagArrayFiltered = state.bagItems.filter((item) => item.name !== itemObjectNameParam)
 
 }
 
 function getBagArrayByNameFromState(objectNameParam) {
 
     let quantityBasedOnName = []
-    return quantityBasedOnName = state.bagItemQuantity.filter(function (object) {
-        return object.itemName === objectNameParam
-    })
+    return quantityBasedOnName = state.bagItemQuantity.filter((object) => object.itemName === objectNameParam)
     
 }
 
 function getQuantityValue(objectNameParam) {
 
-    const arrayLength = getBagArrayByNameFromState(objectNameParam) //this passes the name of the object in the filter to give me array of object filtered
+    //this passes the name of the object in the filter to give me array of object filtered
     //by its name, now i just save that array of objects and then i just .length and i have the quantity based on that item
+    const arrayLength = getBagArrayByNameFromState(objectNameParam) 
     const quantityValueFinal = arrayLength.length
-
     return quantityValueFinal
 
 }
@@ -388,9 +384,19 @@ function getQuantityValue(objectNameParam) {
 function getDeletedUsersFromBagQuantity(itemObjectNameParam) {
 
     let bagQuantityArrayFiltered = []
-    return bagQuantityArrayFiltered = state.bagItemQuantity.filter(function (item) {
-        return item.itemName !== itemObjectNameParam //my mistake BUG was here so the argument was object.name i mistaken as object.name.name and filter didnt show anythig wront
-    })
+    //my mistake BUG was here so the argument was object.name i mistaken as object.name.name and filter didnt show anythig wront
+    return bagQuantityArrayFiltered = state.bagItemQuantity.filter((item) => item.itemName !== itemObjectNameParam)
+
+}
+
+function checkDateEnteredNew(dateEnteredParam, newSpanElParam, divEl3Param) {
+
+    const date1 = Date.parse('2021/07/10')
+    const date2 = Date.parse(dateEnteredParam)
+
+    if (date2 > date1) {
+        divEl3Param.append(newSpanElParam)
+    }
 
 }
 
@@ -738,54 +744,10 @@ function renderMain(storeArrayParam) {
     const divEl2 = document.createElement('div')
     divEl2.setAttribute('class', 'store-items-wrapper')
 
-    for (const item of storeArrayParam) { //this is now the object in an array iteration
+    //this is now the object in an array iteration
+    for (const item of storeArrayParam) {
 
-        const divEl3 = document.createElement('div')
-        divEl3.setAttribute('class', 'store-item')
-
-        const imgEl = document.createElement('img')
-        imgEl.setAttribute('src', `${item.image}`)
-        imgEl.setAttribute('alt', '')
-
-        const h2El2 = document.createElement('h2')
-        h2El2.textContent = item.name
-
-        const spanEl1 = document.createElement('span')
-        spanEl1.setAttribute('class', 'span-1 special-span')
-        spanEl1.textContent = `£ ${item.price}`
-
-        const spanEl2 = document.createElement('span')
-        spanEl2.setAttribute('class', 'span-2')
-        spanEl2.textContent = `£ ${item.discountedPrice}`
-
-        const spanEl3 = document.createElement('span')
-        spanEl3.setAttribute('class', 'span-3')
-        spanEl3.textContent = `Stock: ${item.stock}`
-
-        const spanEl4 = document.createElement('span')
-        spanEl4.setAttribute('class', 'span-4')
-        spanEl4.textContent = `Type For ${item.type}`
-
-        const btnItemEl = document.createElement('button')
-        btnItemEl.textContent = 'Add to bag'
-
-        //now we check if an propery in in the object to see discounted price or not
-        if (item.hasOwnProperty('discountedPrice')) {
-            divEl3.append(imgEl, h2El2, spanEl1, spanEl2, spanEl3, spanEl4, btnItemEl)
-            divEl2.append(divEl3)
-
-            listenToSubmitItemToBag(btnItemEl, item)
-        }
-
-        else {
-            spanEl1.style.color = '#000'
-            spanEl1.style.textDecoration = 'none'
-
-            divEl3.append(imgEl, h2El2, spanEl1, spanEl3, spanEl4, btnItemEl)
-            divEl2.append(divEl3)
-
-            listenToSubmitItemToBag(btnItemEl, item)
-        }
+        renderMainItem(item, divEl2)
 
     }
     // #endregion
@@ -827,6 +789,65 @@ function renderFooter() {
     sectionMenusEl.append(footerMenuEl)
 
 }
+
+function renderMainItem(itemObjectParam, divWrapperParam) {
+
+    const divEl3 = document.createElement('div')
+    divEl3.setAttribute('class', 'store-item')
+
+    const imgEl = document.createElement('img')
+    imgEl.setAttribute('src', `${itemObjectParam.image}`)
+    imgEl.setAttribute('alt', '')
+
+    const h2El2 = document.createElement('h2')
+    h2El2.textContent = itemObjectParam.name
+
+    const spanEl1 = document.createElement('span')
+    spanEl1.setAttribute('class', 'span-1 special-span')
+    spanEl1.textContent = `£ ${itemObjectParam.price}`
+
+    const spanEl2 = document.createElement('span')
+    spanEl2.setAttribute('class', 'span-2')
+        spanEl2.textContent = `£ ${itemObjectParam.discountedPrice}`
+
+    const spanEl3 = document.createElement('span')
+    spanEl3.setAttribute('class', 'span-3')
+    spanEl3.textContent = `Stock: ${itemObjectParam.stock}`
+
+    const spanEl4 = document.createElement('span')
+    spanEl4.setAttribute('class', 'span-4')
+    spanEl4.textContent = `Type For ${itemObjectParam.type}`
+
+    const btnItemEl = document.createElement('button')
+    btnItemEl.textContent = 'Add to bag'
+
+    //CREATING THE NEW SPAN TO CHECK DATE IF ENTERED ITEM IN THE STORE WITH THE STATE CHECK
+    const newSpanEl = document.createElement('span')
+    newSpanEl.setAttribute('class', 'new-item-date')
+    newSpanEl.textContent = 'New Item'
+
+    //here i call the function to check the date, i need to pass the span, the div to append in that function and then the date from state
+    checkDateEnteredNew(itemObjectParam.dateEntered, newSpanEl, divEl3)
+
+    //now we check if an propery in in the object to see discounted price or not
+    if (itemObjectParam.hasOwnProperty('discountedPrice')) {
+        divEl3.append(imgEl, h2El2, spanEl1, spanEl2, spanEl3, spanEl4, btnItemEl)
+        divWrapperParam.append(divEl3)
+
+        listenToSubmitItemToBag(btnItemEl, itemObjectParam)
+    }
+
+    else {
+        spanEl1.style.color = '#000'
+        spanEl1.style.textDecoration = 'none'
+
+        divEl3.append(imgEl, h2El2, spanEl1, spanEl3, spanEl4, btnItemEl)
+        divWrapperParam.append(divEl3)
+
+        listenToSubmitItemToBag(btnItemEl, itemObjectParam)
+    }
+
+}
 // #endregion
 
 // #region "RENDER AND INIT"
@@ -859,7 +880,7 @@ function render() {
     // #region "CONDITIONAL FOR NAME SEARCH CLICKED"
     else if (state.girlsClicked === false && state.guysClicked === false && state.salesClicked === false && state.searchClicked === true) {
 
-        let searchArray = searchCatcher
+        let searchArray = state.searchCatcher
 
         //recreate everything in html every time render is called, basically rerendering
         renderHeader()

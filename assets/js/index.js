@@ -17,27 +17,37 @@ let stockHolderEl = null
 let searchCatcher = []
 let userCatcher = [] 
 let btnCounter = 0
-let bagArray = []
-let bagArrayNoDuplicate = []
 // #endregion
 
 
 // #region "-----STATE OBJECT-----"
 //Everything is here everything is retrieveed from state, every filters updates the state then rerenders, state answers app questions concept
 const state = {
+
+    //two important arrays for fetching and udapting the state
     store: [],
     users: [],
+
+    //additional array for items in the bag
     bagItems: [],
+    bagItemQuantity: [],
+
+    //checking to show the username after login
     userName: null,
-    stockSpanValue: null,
     userShowClass: null,
+
+    //here checking to show the span in the page
+    stockSpanValue: null,
     stockShowClass: null,
+
+    //checking for the render in render() lots of conditionals
     girlsClicked: false,
     guysClicked: false,
     salesClicked: false,
     searchClicked: false,
     userClicked: false,
     bagClicked: false
+
 }
 // #endregion
 
@@ -221,15 +231,15 @@ function listenToRemoveBag(buttonElParam) {
 function listenToSubmitItemToBag(buttonItemParam, itemObjectParam) {
 
     buttonItemParam.addEventListener('click', function(event) {
-        event.preventDefault()
-        console.log("item button is Clicked")
-        btnCounter++
 
-        stockHolderEl.classList.add('show')
+        event.preventDefault()
+        console.log("item button is Clicked, so now its ready to go to bag from page")
+
         state.stockShowClass = 'show'
+        stockHolderEl.classList.add(state.stockShowClass) //linking DOM AND STATE
 
         itemObjectParam.stock -= 1
-        stockHolderEl.textContent = state.stockSpanValue
+        stockHolderEl.textContent = state.stockSpanValue //linking DON AND STATE, when rerendered the value works not negative etc
 
         if (itemObjectParam.stock < 0) {
             itemObjectParam.stock = 0 //removing negative values from span and stock ruining the state object
@@ -239,13 +249,50 @@ function listenToSubmitItemToBag(buttonItemParam, itemObjectParam) {
             state.stockSpanValue += 1
         }
 
-        bagArray.push(itemObjectParam)
-        bagArrayNoDuplicate = [...new Set(bagArray)]
+        let quantityBag = 0
+        quantityBag++
+
+        const itemNameValue = itemObjectParam.name
+        const objectBag = {
+            itemName: itemNameValue,
+            quantity: quantityBag
+        } 
+
+        //so here i just put the entry name of the bag item with quantity 1 so when i have to calculate i just filter and find the length based on the name
+        state.bagItemQuantity.push(objectBag)
+        state.bagItems.push(itemObjectParam)
+        state.bagItems = [...new Set(state.bagItems)] //removes duplicate from an aray uses set also spread operator
 
         render()
 
     })
     
+}
+
+function listenToRemoveBagItem(btnRemoveItemElParam, itemObjectParam, divItemParam) {
+
+    btnRemoveItemElParam.addEventListener('click', function(event) {
+
+        event.preventDefault()
+
+        divItemParam.remove() //remove from html the dom item
+
+        //update the state another array, here we change state bag array from FILTER
+        state.bagItems = getDeletedUsersFromBag(itemObjectParam.name)
+        
+        const quantity = getQuantityValue(itemObjectParam.name)
+    
+        itemObjectParam.stock += quantity
+        state.stockSpanValue -= quantity
+        stockHolderEl.textContent = state.stockSpanValue
+
+        state.bagItemQuantity = getDeletedUsersFromBagQuantity(itemObjectParam.name)
+
+        render() //rerender the app
+
+    })
+
+
 }
 
 function getStockSpanEl(stockElParam) {
@@ -309,13 +356,60 @@ function getUserCredentialsFromStateFilter(emailParam, passwordParam) {
     })
 
 }
+
+function getDeletedUsersFromBag(itemObjectNameParam) {
+
+    let bagArrayFiltered = []
+    return bagArrayFiltered = state.bagItems.filter(function (item) {
+        return item.name !== itemObjectNameParam //my mistake BUG was here so the argument was object.name i mistaken as object.name.name and filter didnt show anythig wront
+    })
+
+}
+
+function getBagArrayByNameFromState(objectNameParam) {
+
+    let quantityBasedOnName = []
+    return quantityBasedOnName = state.bagItemQuantity.filter(function (object) {
+        return object.itemName === objectNameParam
+    })
+    
+}
+
+function getQuantityValue(objectNameParam) {
+
+    const arrayLength = getBagArrayByNameFromState(objectNameParam) //this passes the name of the object in the filter to give me array of object filtered
+    //by its name, now i just save that array of objects and then i just .length and i have the quantity based on that item
+    const quantityValueFinal = arrayLength.length
+
+    return quantityValueFinal
+
+}
+
+function getDeletedUsersFromBagQuantity(itemObjectNameParam) {
+
+    let bagQuantityArrayFiltered = []
+    return bagQuantityArrayFiltered = state.bagItemQuantity.filter(function (item) {
+        return item.itemName !== itemObjectNameParam //my mistake BUG was here so the argument was object.name i mistaken as object.name.name and filter didnt show anythig wront
+    })
+
+}
+
+// function getQuantityFromBagArrayInState() {
+
+//     let quantityArray = []
+//     return quantityArray = state.bagItemQuantity.filter(function (object) {
+//         return object.itemName.filter(function (quantity) {
+//             return quantity
+//         })
+//     })
+
+// }
 // #endregion
 
 // #endregion
 
 
 // #region "-----SERVER FUNCTIONS-----"
-
 function getStoreArrayFromServer() {
 
     return fetch('http://localhost:3000/store')        
@@ -335,7 +429,6 @@ function getUsersArrayFromServer() {
         })
 
 }
-
 // #endregion
 
 
@@ -461,7 +554,7 @@ function renderBagModal() {
     divItemWrapperEl.setAttribute('class', 'wrapper-items-bag')
     divItemWrapperEl.innerHTML = '' //destroy after each rerender then recreate
 
-    for (const item of bagArrayNoDuplicate) {
+    for (const item of state.bagItems) {
 
         const divItemEl = document.createElement('div')
         divItemEl.setAttribute('class', 'item-bag') 
@@ -475,21 +568,25 @@ function renderBagModal() {
 
         const spanEl1 = document.createElement('span')
         spanEl1.setAttribute('class', 'span-1-bag')
-        spanEl1.textContent = item.price
+        spanEl1.textContent = `Price: ${item.price}`
 
         const spanEl2 = document.createElement('span')
         spanEl2.setAttribute('class', 'span-2-bag')
-        spanEl2.textContent = item.discountedPrice
+        spanEl2.textContent = `Discounted Price: ${item.discountedPrice}` //BUG TEMPLATE LITERALS CAUSED UNDEFINED 
+
+        const quantityValue = getQuantityValue(item.name) //important to get the quantity of x item with that name passed as argument
 
         const spanEl3 = document.createElement('span')
         spanEl3.setAttribute('class', 'span-3-bag')
-        spanEl3.textContent = '(x3)'
+        spanEl3.textContent = `Quantity: ${quantityValue}`
 
         const btnRemoveItem = document.createElement('button')
         btnRemoveItem.textContent = 'Remove'
 
         divItemEl.append(imgEl, h4El, spanEl1, spanEl2, spanEl3, btnRemoveItem)
         divItemWrapperEl.append(divItemEl)
+
+        listenToRemoveBagItem(btnRemoveItem, item, divItemEl)
 
     }
 

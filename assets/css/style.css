@@ -68,6 +68,8 @@ ul.header-ul-2 {
 
 ul.header-ul-2 li {
     color: #1d2f55;
+    display: grid;
+    grid-template-rows: 0.8fr 0.2fr;
 }
 
 main.main-menu {
@@ -377,12 +379,13 @@ header.header-menu button {
     width: 800px;
     background-color: #f1f1f6;
     place-items: center;
+    overflow: scroll;
 }
 
 .modal-wrapper-3 {
     display: grid;
     grid-template-rows: 0.1fr 0.5fr 50px;
-    grid-gap: 20px;
+    grid-gap: 60px;
     place-items: center;
 }
 
@@ -396,11 +399,17 @@ header.header-menu button {
 .modal-3 .item-bag {
     display: grid;
     grid-template:
-    "img-item-bag h4-item-bag h4-item-bag h4-item-bag" 50px
-    "img-item-bag span-1-item-bag span-2-item-bag span-3-item-bag" 50px
-    "img-item-bag button-item-bag button-item-bag button-item-bag" 50px /
-    150px 50px 50px 50px ;
+    "img-item-bag h4-item-bag h4-item-bag h4-item-bag" 80px
+    "img-item-bag span-1-item-bag span-2-item-bag span-3-item-bag" 80px
+    "img-item-bag button-item-bag button-item-bag button-item-bag" 40px /
+    150px 100px 100px 100px ;
     /* align-items: center; */
+}
+
+.wrapper-items-bag {
+    display: grid;
+    grid-template-rows: auto;
+    grid-gap: 80px;
 }
 
 .item-bag img {
@@ -410,6 +419,7 @@ header.header-menu button {
 
 .item-bag h4 {
     grid-area: h4-item-bag;
+    font-size: 18px;
 }
 
 .item-bag .span-1-bag {
@@ -426,12 +436,27 @@ header.header-menu button {
 
 .item-bag button {
     grid-area: button-item-bag;
+    padding: 5px 5px;
+    outline: none;
+    border: none;
+    background-color: #c22048;
+    color: #f1f1f6;
+    cursor: pointer;
 }
 
 .modal-3 .removing-bag {
     display: grid;
     grid-template-columns: 200px 35px;
     place-items: center;
+}
+
+.modal-3 .removing-bag button {
+    border: none;
+    outline: none;
+    background-color: #c22048;
+    color: #f1f1f6;
+    padding: 15px 15px;
+    cursor: pointer;
 }
 
 span.span-user-login {
@@ -448,6 +473,9 @@ span.span-bag-stock {
 }
 
 span.span-bag-stock.show {
-    display: inline-block;
-    color: #1d2f55;
+    display: grid;
+    place-self: center;
+    color: #c22048;
+    font-size: 20px;
+    font-weight: 900;
 }

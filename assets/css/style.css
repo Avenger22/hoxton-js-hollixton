@@ -95,7 +95,9 @@ main.main-menu {
 }
 
 .store-item {
-    /* height: 250px; */
+    height: 450px;
+    width: 200px;
+    cursor: pointer;
     display: grid;
     grid-template: 
     "img img" 0.55fr

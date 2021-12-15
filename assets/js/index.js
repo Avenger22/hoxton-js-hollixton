@@ -41,15 +41,20 @@ const state = {
     stockShowClass: null,
 
     //checking for the render in render() lots of conditionals
+    logoClicked: false, //deffault rendering
     girlsClicked: false,
     guysClicked: false,
     salesClicked: false,
 
     //here for 3 modals state and dom linking
     searchModalClicked: false,
-    searchClicked: false,
-    userClicked: false,
-    bagClicked: false
+    userModalClicked: false,
+    bagModalClicked: false,
+
+    specificItemClicked: false,
+
+    //only for submiting the search is needed to check in render conditionals
+    searchClicked: false
 
 }
 // #endregion
@@ -66,8 +71,9 @@ function listenToLogoEvent(logoElParam) {
         event.preventDefault()
         console.log("Logo is Clicked")
 
-        getDeffaultLogoFilter()
+        // getDeffaultLogoFilter()
 
+        state.logoClicked = true
         render()
     })
 
@@ -79,7 +85,7 @@ function listenToGirlsEvent(girlsElParam) {
         event.preventDefault()
         console.log("Girls is Clicked")
 
-        getGirlsFromStateFilter()
+        // getGirlsFromStateFilter()
 
         state.girlsClicked = true //UPDATE THE STATE THEN RERENDER THE APP
         render()
@@ -93,7 +99,7 @@ function listenToGuysEvent(guysElParam) {
         event.preventDefault()
         console.log("Guys is Clicked")
 
-        getGuysFromStateFilter()
+        // getGuysFromStateFilter()
 
         state.guysClicked = true //UPDATE THE STATE THEN RERENDER THE APP
         render()
@@ -107,7 +113,7 @@ function listenToSalesEvent(salesElParam) {
         event.preventDefault()
         console.log("Sales is Clicked")
 
-        getSalesFromStateFilter()
+        // getSalesFromStateFilter()
 
         state.salesClicked = true //UPDATE THE STATE THEN RERENDER THE APP
         render()
@@ -160,7 +166,7 @@ function listenToUserEvent(userElParam) {
     
     userElParam.addEventListener('click', function(event) {
         event.preventDefault()
-        // state.userClicked = true
+        state.userModalClicked = true
         divEl2.classList.add('show')
         // render()
     })
@@ -171,7 +177,7 @@ function listenToRemoveUser(buttonElParam) {
 
     buttonElParam.addEventListener('click', function(event) {
         event.preventDefault()
-        // state.userClicked = false
+        state.userModalClicked = false
         divEl2.classList.remove('show')
         // render()
     })
@@ -218,7 +224,7 @@ function listenToBagEvent(bagElParam) {
     
     bagElParam.addEventListener('click', function(event) {
         event.preventDefault()
-        // state.bagClicked = true
+        state.bagModalClicked = true
         divEl3.classList.add('show')
         // render()
     })
@@ -229,7 +235,7 @@ function listenToRemoveBag(buttonElParam) {
 
     buttonElParam.addEventListener('click', function(event) {
         event.preventDefault()
-        state.bagClicked = false
+        state.bagModalClicked = false
         divEl3.classList.remove('show')
         // render()
     })
@@ -305,6 +311,37 @@ function listenToRemoveBagItem(btnRemoveItemElParam, itemObjectParam, divItemPar
 
 function getStockSpanEl(stockElParam) {
     return stockElParam
+}
+// #endregion
+
+// #region 'EVENT LISTENER MAIN ITEM'
+function listenToClickItem(divEl3Param, divWrapperParam, btnElParam, itemObjectParam) {
+
+    divEl3Param.addEventListener('click', function(event) {
+
+        event.preventDefault()
+        console.log('Listen to click item function activated')
+
+        renderMainItemClicked(divEl3Param, divWrapperParam, btnElParam, itemObjectParam)
+
+        state.specificItemClicked = true //change state
+
+        // render() //rerender BUG
+
+    })
+
+}
+
+function listenToGoBackBtn(goBackBtnElParam) {
+
+    goBackBtnElParam.addEventListener('click', function(event) {
+
+        event.preventDefault()
+        state.specificItemClicked = false
+        render()
+
+    })
+
 }
 // #endregion
 
@@ -400,6 +437,13 @@ function checkDateEnteredNew(dateEnteredParam, newSpanElParam, divEl3Param) {
     }
 
 }
+
+// function getSpecificMainItemClicked(itemObjectParam) {
+
+//     let specificMainItem = []
+//     return specificMainItem = state.store.filter((item) => item.name === itemObjectParam.name)
+
+// }
 
 // function getQuantityFromBagArrayInState() {
 
@@ -811,7 +855,7 @@ function renderMainItem(itemObjectParam, divWrapperParam) {
 
     const spanEl2 = document.createElement('span')
     spanEl2.setAttribute('class', 'span-2')
-        spanEl2.textContent = `£ ${itemObjectParam.discountedPrice}`
+    spanEl2.textContent = `£ ${itemObjectParam.discountedPrice}`
 
     const spanEl3 = document.createElement('span')
     spanEl3.setAttribute('class', 'span-3')
@@ -838,7 +882,8 @@ function renderMainItem(itemObjectParam, divWrapperParam) {
         divEl3.append(imgEl, h2El2, spanEl1, spanEl2, spanEl3, spanEl4, btnItemEl)
         divWrapperParam.append(divEl3)
 
-        listenToSubmitItemToBag(btnItemEl, itemObjectParam)
+        listenToSubmitItemToBag(btnItemEl, itemObjectParam) //this is for add to button functionality
+        listenToClickItem(divEl3, divWrapperParam ,btnItemEl ,itemObjectParam) //this renders specific click on item 
 
     }
 
@@ -850,9 +895,25 @@ function renderMainItem(itemObjectParam, divWrapperParam) {
         divEl3.append(imgEl, h2El2, spanEl1, spanEl3, spanEl4, btnItemEl)
         divWrapperParam.append(divEl3)
 
-        listenToSubmitItemToBag(btnItemEl, itemObjectParam)
+        listenToSubmitItemToBag(btnItemEl, itemObjectParam) //this is for add to button functionality
+        listenToClickItem(divEl3, divWrapperParam, btnItemEl, itemObjectParam) //this renders specific click on item 
 
     }
+
+}
+
+function renderMainItemClicked(divItemParam, divWrapperParam, btnElParam, itemObjectParam) {
+
+    divWrapperParam.innerHTML = ''
+
+    const goBackBtnEl = document.createElement('button')
+    goBackBtnEl.textContent = 'Go Back'
+
+    divItemParam.append(goBackBtnEl)
+    divWrapperParam.append(divItemParam)
+
+    listenToSubmitItemToBag(btnElParam, itemObjectParam)
+    listenToGoBackBtn(goBackBtnEl)
 
 }
 // #endregion
@@ -867,7 +928,7 @@ function render() {
     divEl3.innerHTML = ''
 
     // #region "CONDITIONAL FOR GIRLS CLICKED"
-    if (state.girlsClicked === true && state.guysClicked === false && state.salesClicked === false && state.searchClicked === false) {
+    if (state.girlsClicked === true && state.guysClicked === false && state.salesClicked === false && state.logoClicked === false && state.searchClicked === false) {
 
         const girlsArrayValue = getGirlsFromStateFilter()
         //recreate everything in html every time render is called, basically rerendering
@@ -885,7 +946,7 @@ function render() {
     // #endregion
 
     // #region "CONDITIONAL FOR NAME SEARCH CLICKED"
-    else if (state.girlsClicked === false && state.guysClicked === false && state.salesClicked === false && state.searchClicked === true) {
+    else if (state.girlsClicked === false && state.guysClicked === false && state.salesClicked === false && state.logoClicked === false && state.searchClicked === true) {
 
         let searchArray = state.searchCatcher
 
@@ -904,7 +965,7 @@ function render() {
     // #endregion
 
     // #region "CONDITIONAL FOR GUYS CLICKED"
-    else if (state.girlsClicked === false && state.guysClicked === true && state.salesClicked === false && state.searchClicked === false) {
+    else if (state.girlsClicked === false && state.guysClicked === true && state.salesClicked === false && state.logoClicked === false && state.searchClicked === false) {
 
         guysArrayValue = getGuysFromStateFilter()
         //recreate everything in html every time render is called, basically rerendering
@@ -922,7 +983,7 @@ function render() {
     // #endregion
 
     // #region "CONDITIONAL FOR SALES CLICKED"
-    else if (state.girlsClicked === false && state.guysClicked === false && state.salesClicked === true && state.searchClicked === false) {
+    else if (state.girlsClicked === false && state.guysClicked === false && state.salesClicked === true && state.logoClicked === false && state.searchClicked === false) {
 
         salesArrayValue = getSalesFromStateFilter()
         //recreate everything in html every time render is called, basically rerendering
@@ -939,8 +1000,9 @@ function render() {
     }
     // #endregion
 
-    // #region "CONDITIONAL FOR NORMAL RENDERING NO CLICKING FROM STATE"
-    else if(state.girlsClicked === false && state.guysClicked === false && state.salesClicked === false && state.searchClicked === false) {
+    // #region "CONDITIONAL FOR LOGO CLICKED"
+    else if (state.girlsClicked === false && state.guysClicked === false && state.salesClicked === false && state.logoClicked === true && state.searchClicked === false) {
+
         deffaultArrayValue = getDeffaultLogoFilter()
         //recreate everything in html every time render is called, basically rerendering
         renderHeader()
@@ -949,6 +1011,25 @@ function render() {
         renderSearchModal()
         renderUserModal()
         renderBagModal()
+
+        console.log('Changing here the state from true to false in order to achieve app functionality')
+        state.logoClicked = false
+
+    }
+    // #endregion
+
+    // #region "CONDITIONAL FOR NORMAL RENDERING NO CLICKING FROM STATE"
+    else if(state.girlsClicked === false && state.guysClicked === false && state.salesClicked === false && state.logoClicked === false && state.searchClicked === false) {
+
+        deffaultArrayValue = getDeffaultLogoFilter()
+        //recreate everything in html every time render is called, basically rerendering
+        renderHeader()
+        renderMain(deffaultArrayValue)
+        renderFooter()
+        renderSearchModal()
+        renderUserModal()
+        renderBagModal()
+
     }
     // #endregion
 

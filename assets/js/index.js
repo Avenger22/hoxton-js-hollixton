@@ -16,6 +16,7 @@ let stockHolderEl = null //same as above
 let selectHolderEl = null
 // #endregion
 
+//------------------------------------------------------------------------------------------------------------------
 
 // #region "-----STATE OBJECT-----"
 //Everything is here everything is retrieveed from state, every filters updates the state then rerenders, state answers app questions concept
@@ -65,6 +66,7 @@ const state = {
 }
 // #endregion
 
+//------------------------------------------------------------------------------------------------------------------
 
 // #region "-----HELPER FUNCTIONS-----"
 
@@ -543,6 +545,7 @@ function getSortedByDateDesc() {
 
 // #endregion
 
+//------------------------------------------------------------------------------------------------------------------
 
 // #region "-----SERVER FUNCTIONS-----"
 function getStoreArrayFromServer() {
@@ -566,6 +569,7 @@ function getUsersArrayFromServer() {
 }
 // #endregion
 
+//------------------------------------------------------------------------------------------------------------------
 
 // #region "-----RENDER FUNCTIONS-----"
 
@@ -1329,6 +1333,7 @@ function init() {
 
 // #endregion
 
+//------------------------------------------------------------------------------------------------------------------
 
 // #region "-----APP START-----"
 init()

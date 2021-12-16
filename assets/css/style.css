@@ -45,8 +45,8 @@ header.header-menu nav.header-nav {
 
 ul.header-ul-1 {
     display: grid;
-    grid-template-columns: 0.25fr 0.25fr 0.25fr 0.25fr;
-    grid-gap: 25px;
+    grid-template-columns: 0.20fr 0.20fr 0.20fr 0.20fr 0.20fr;
+    grid-gap: 15px;
 
     padding-left: 35px;
 }
@@ -57,6 +57,16 @@ ul.header-ul-1 li {
     font-weight: 600;
 }
 
+ul.header-ul-1 select {
+    outline: none;
+    border: none;
+}
+
+select option {
+    outline: none;
+    border: none;
+    font-size: 15px;
+}
 ul.header-ul-2 {
     display: grid;
     grid-template-columns: 0.33fr 0.33fr 0.33fr;

@@ -13,6 +13,7 @@ divEl3.setAttribute('class', 'modal-container-3')
 
 let spanHolderEl = null //this is important to hold the stock span EL when its rendered so i can acces it and use it in other parts of app
 let stockHolderEl = null //same as above
+let selectHolderEl = null
 // #endregion
 
 
@@ -54,7 +55,12 @@ const state = {
     specificItemClicked: false,
 
     //only for submiting the search is needed to check in render conditionals
-    searchClicked: false
+    searchClicked: false,
+
+    //for select event and rendering etc feature
+    selectOptions: ['price-asc', 'price-desc', 'name-asc', 'name-desc', 'date-asc', 'date-desc'],
+    selectedOption: null 
+    //even if i dont have it in state, in event listener when i assign to this it auto creates it with value of select like i wanted
 
 }
 // #endregion
@@ -117,6 +123,19 @@ function listenToSalesEvent(salesElParam) {
 
         state.salesClicked = true //UPDATE THE STATE THEN RERENDER THE APP
         render()
+    })
+
+}
+
+function listenToSelectEvent(selectElParam) {
+
+    selectElParam.addEventListener('change', function(event) {
+
+        event.preventDefault()
+        
+        state.selectedOption = selectElParam.value //linking state and dom
+        render() //rerender
+
     })
 
 }
@@ -438,6 +457,69 @@ function checkDateEnteredNew(dateEnteredParam, newSpanElParam, divEl3Param) {
 
 }
 
+// #region "SORT FUNCTIONS FOR SELECT"
+function getSortedByPriceAsc() {
+
+    let sortedByPriceAsc = []
+    sortedByPriceAsc = state.store.sort((a, b) => (a.price > b.price) ? 1 : (a.price === b.price) ? ((a.name > b.name) ? 1 : -1) : -1 )
+    
+    console.log(sortedByPriceAsc)
+    return sortedByPriceAsc
+
+}
+
+function getSortedByPriceDesc() {
+
+    let sortedByPriceDesc = []
+    sortedByPriceDesc = getSortedByPriceAsc().reverse()
+    
+    console.log(sortedByPriceDesc)
+    return sortedByPriceDesc
+
+}
+
+function getSortedByNameAsc() {
+
+    let sortedByNameAsc = []
+    sortedByNameAsc = state.store.sort((a, b) => (a.name > b.name) ? 1 : (a.name === b.name) ? ((a.price > b.price) ? 1 : -1) : -1 )
+    
+    console.log(sortedByNameAsc)
+    return sortedByNameAsc
+
+}
+
+function getSortedByNameDesc() {
+
+    let sortedByNameDesc = []
+    sortedByNameDesc = getSortedByNameAsc().reverse()
+    
+    console.log(sortedByNameDesc)
+    return sortedByNameDesc
+
+}
+
+function getSortedByDateAsc() {
+
+    let sortedByDateAsc = []
+    sortedByDateAsc = state.store.sort((a, b) => (Date.parse(a.dateEntered) > Date.parse(b.dateEntered)) ? 1 : (Date.parse(a.dateEntered) === Date.parse(b.dateEntered)) ? ((a.name > b.name) ? 1 : -1) : -1 )
+    
+    console.log(sortedByDateAsc)
+    return sortedByDateAsc
+
+}
+
+function getSortedByDateDesc() {
+
+    let sortedByDateDesc = []
+    sortedByDateDesc = getSortedByDateAsc()
+    
+    console.log(sortedByDateDesc)
+    return sortedByDateDesc
+
+}
+// #endregion
+
+// #region "OTHER WICH FOR THE MOMMENT ARE NOT USED"
 // function getSpecificMainItemClicked(itemObjectParam) {
 
 //     let specificMainItem = []
@@ -455,6 +537,8 @@ function checkDateEnteredNew(dateEnteredParam, newSpanElParam, divEl3Param) {
 //     })
 
 // }
+// #endregion
+
 // #endregion
 
 // #endregion
@@ -680,6 +764,7 @@ function renderHeader() {
     const liUl1_2 = document.createElement('li')
     const liUl1_3 = document.createElement('li')
     const liUl1_4 = document.createElement('li')
+    const liUl1_5 = document.createElement('li')
 
     const aUl1_1 = document.createElement('a')
     aUl1_1.setAttribute('href', '#')
@@ -696,18 +781,61 @@ function renderHeader() {
     const aUl1_4 = document.createElement('a')
     aUl1_4.setAttribute('href', '#')
     aUl1_4.textContent = 'Sales'
-    
+
+    // #region 'CREATING THE SELECT SORT'
+    const selectEl = document.createElement('select')
+    selectEl.setAttribute('name', 'filter-by-sort')
+    selectEl.setAttribute('id', 'filter-by-sort')
+
+    const optionEl1 = document.createElement('option')
+    optionEl1.setAttribute('value', '')
+    optionEl1.textContent = 'Choose a sorting option....'
+
+    const optionEl2 = document.createElement('option')
+    optionEl2.setAttribute('value', 'price-asc')
+    optionEl2.textContent = 'Sort by price ascending'
+
+    const optionEl3 = document.createElement('option')
+    optionEl3.setAttribute('value', 'price-desc')
+    optionEl3.textContent = 'Sort by price descending'
+
+    const optionEl4 = document.createElement('option')
+    optionEl4.setAttribute('value', 'name-asc')
+    optionEl4.textContent = 'Sort by name ascending'
+
+    const optionEl5 = document.createElement('option')
+    optionEl5.setAttribute('value', 'name-desc')
+    optionEl5.textContent = 'Sort by name descending'
+
+    const optionEl6 = document.createElement('option')
+    optionEl6.setAttribute('value', 'date-asc')
+    optionEl6.textContent = 'Sort by date earlier-latest'
+
+    const optionEl7 = document.createElement('option')
+    optionEl7.setAttribute('value', 'date-desc')
+    optionEl7.textContent = 'Sort by date latest-earlier'
+
+    //appending to the form
+    selectEl.append(optionEl1, optionEl2, optionEl3, optionEl4, optionEl5, optionEl6, optionEl7)
+    selectHolderEl = selectEl
+    // #endregion
+
+    //appending for ul-header-1
     liUl1_1.append(aUl1_1)
     liUl1_2.append(aUl1_2)
     liUl1_3.append(aUl1_3)
     liUl1_4.append(aUl1_4)
+    liUl1_5.append(selectEl)
 
+    //event listener for the ul-header-1
     listenToLogoEvent(liUl1_1)
     listenToGirlsEvent(liUl1_2)
     listenToGuysEvent(liUl1_3)
     listenToSalesEvent(liUl1_4)
+    listenToSelectEvent(selectEl)
 
-    ulHeader1.append(liUl1_1, liUl1_2, liUl1_3, liUl1_4)
+    ulHeader1.append(liUl1_1, liUl1_2, liUl1_3, liUl1_4, liUl1_5)
+
     // #endregion
 
     // #region "CREATING UL HEADER 2"
@@ -928,7 +1056,7 @@ function render() {
     divEl3.innerHTML = ''
 
     // #region "CONDITIONAL FOR GIRLS CLICKED"
-    if (state.girlsClicked === true && state.guysClicked === false && state.salesClicked === false && state.logoClicked === false && state.searchClicked === false) {
+    if (state.girlsClicked === true && state.guysClicked === false && state.salesClicked === false && state.logoClicked === false && state.searchClicked === false && state.selectedOption === null) {
 
         const girlsArrayValue = getGirlsFromStateFilter()
         //recreate everything in html every time render is called, basically rerendering
@@ -946,7 +1074,7 @@ function render() {
     // #endregion
 
     // #region "CONDITIONAL FOR NAME SEARCH CLICKED"
-    else if (state.girlsClicked === false && state.guysClicked === false && state.salesClicked === false && state.logoClicked === false && state.searchClicked === true) {
+    else if (state.girlsClicked === false && state.guysClicked === false && state.salesClicked === false && state.logoClicked === false && state.searchClicked === true && state.selectedOption === null) {
 
         let searchArray = state.searchCatcher
 
@@ -965,7 +1093,7 @@ function render() {
     // #endregion
 
     // #region "CONDITIONAL FOR GUYS CLICKED"
-    else if (state.girlsClicked === false && state.guysClicked === true && state.salesClicked === false && state.logoClicked === false && state.searchClicked === false) {
+    else if (state.girlsClicked === false && state.guysClicked === true && state.salesClicked === false && state.logoClicked === false && state.searchClicked === false && state.selectedOption === null) {
 
         guysArrayValue = getGuysFromStateFilter()
         //recreate everything in html every time render is called, basically rerendering
@@ -983,7 +1111,7 @@ function render() {
     // #endregion
 
     // #region "CONDITIONAL FOR SALES CLICKED"
-    else if (state.girlsClicked === false && state.guysClicked === false && state.salesClicked === true && state.logoClicked === false && state.searchClicked === false) {
+    else if (state.girlsClicked === false && state.guysClicked === false && state.salesClicked === true && state.logoClicked === false && state.searchClicked === false && state.selectedOption === null) {
 
         salesArrayValue = getSalesFromStateFilter()
         //recreate everything in html every time render is called, basically rerendering
@@ -1001,7 +1129,7 @@ function render() {
     // #endregion
 
     // #region "CONDITIONAL FOR LOGO CLICKED"
-    else if (state.girlsClicked === false && state.guysClicked === false && state.salesClicked === false && state.logoClicked === true && state.searchClicked === false) {
+    else if (state.girlsClicked === false && state.guysClicked === false && state.salesClicked === false && state.logoClicked === true && state.searchClicked === false && state.selectedOption === null) {
 
         deffaultArrayValue = getDeffaultLogoFilter()
         //recreate everything in html every time render is called, basically rerendering
@@ -1019,7 +1147,7 @@ function render() {
     // #endregion
 
     // #region "CONDITIONAL FOR NORMAL RENDERING NO CLICKING FROM STATE"
-    else if(state.girlsClicked === false && state.guysClicked === false && state.salesClicked === false && state.logoClicked === false && state.searchClicked === false) {
+    else if(state.girlsClicked === false && state.guysClicked === false && state.salesClicked === false && state.logoClicked === false && state.searchClicked === false && state.selectedOption === null) {
 
         deffaultArrayValue = getDeffaultLogoFilter()
         //recreate everything in html every time render is called, basically rerendering
@@ -1033,6 +1161,152 @@ function render() {
     }
     // #endregion
 
+    // #region "CONDITIONAL FOR RENDERING BASED ON SELECTED SORT OPTION IN SELECT"
+    else if (state.girlsClicked === false && state.guysClicked === false && state.salesClicked === false && state.logoClicked === false && state.selectedOption !== null) {
+
+        //HERE WE HAVE ALL SIX ARRYS FROM SORT FUNCTIONS WITH RETURN AN ARRAY
+        const priceAscArray = getSortedByPriceAsc()
+        const priceDescArray = getSortedByPriceDesc()
+        const nameAscArray = getSortedByNameAsc()
+        const nameDescArray = getSortedByNameDesc()
+        const dateAscArray = getSortedByDateAsc()
+        const dateDescArray = getSortedByDateDesc()
+
+        // #region 'CONDITIONAL TO RENDER BASED ON SELECTED OPTION
+        if (state.selectedOption === 'price-asc') {
+            renderHeader()
+            renderMain(priceAscArray)
+            renderFooter()
+            renderSearchModal()
+            renderUserModal()
+            renderBagModal()
+            
+            state.selectedOption = null
+        }
+
+        else if (state.selectedOption === 'price-desc'){
+            renderHeader()
+            renderMain(priceDescArray)
+            renderFooter()
+            renderSearchModal()
+            renderUserModal()
+            renderBagModal()
+
+            state.selectedOption = null
+        }
+
+        else if (state.selectedOption === 'name-asc'){
+            renderHeader()
+            renderMain(nameAscArray)
+            renderFooter()
+            renderSearchModal()
+            renderUserModal()
+            renderBagModal()
+
+            state.selectedOption = null
+        }
+
+        else if (state.selectedOption === 'name-desc'){
+            renderHeader()
+            renderMain(nameDescArray)
+            renderFooter()
+            renderSearchModal()
+            renderUserModal()
+            renderBagModal()
+
+            state.selectedOption = null
+        }
+
+        else if (state.selectedOption === 'date-asc'){
+            renderHeader()
+            renderMain(dateAscArray)
+            renderFooter()
+            renderSearchModal()
+            renderUserModal()
+            renderBagModal()
+
+            state.selectedOption = null
+        }
+
+        else if (state.selectedOption === 'date-desc'){
+            renderHeader()
+            renderMain(dateDescArray)
+            renderFooter()
+            renderSearchModal()
+            renderUserModal()
+            renderBagModal()
+
+            state.selectedOption = null
+        }
+        // #endregion
+
+        // #region "TRIED WITH SWITCH CASE DIDNT WORK EITHER"
+        // switch(state.selectedOption) {
+
+        //     case 'price-asc': 
+        //         renderHeader()
+        //         renderMain(priceAscArray)
+        //         renderFooter()
+        //         renderSearchModal()
+        //         renderUserModal()
+        //         renderBagModal()
+        //         break;
+
+        //     case 'price-desc':
+        //         renderHeader()
+        //         renderMain(priceDescArray)
+        //         renderFooter()
+        //         renderSearchModal()
+        //         renderUserModal()
+        //         renderBagModal()
+        //         break;
+            
+        //     case 'name-asc':
+        //         renderHeader()
+        //         renderMain(nameAscArray)
+        //         renderFooter()
+        //         renderSearchModal()
+        //         renderUserModal()
+        //         renderBagModal()
+        //         break;
+
+        //     case 'name-desc':
+        //         renderHeader()
+        //         renderMain(nameDescArray)
+        //         renderFooter()
+        //         renderSearchModal()
+        //         renderUserModal()
+        //         renderBagModal()
+        //         break;
+
+        //     case 'date-asc':
+        //         renderHeader()
+        //         renderMain(dateAscArray)
+        //         renderFooter()
+        //         renderSearchModal()
+        //         renderUserModal()
+        //         renderBagModal()
+        //         break;
+
+        //     case 'date-desc':
+        //         renderHeader()
+        //         renderMain(dateDescArray)
+        //         renderFooter()
+        //         renderSearchModal()
+        //         renderUserModal()
+        //         renderBagModal()
+        //         break;
+
+        //     default: 
+        //         console.log('Error')
+
+        // }
+
+        // state.selectedOption = '' 
+        // #endregion
+            
+    }
+    // #endregion
 }
 
 function init() {
